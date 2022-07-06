@@ -1,4 +1,4 @@
-package com.brenner.savingsgoals.controller.service;
+package com.brenner.savingsgoals.service;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.*;

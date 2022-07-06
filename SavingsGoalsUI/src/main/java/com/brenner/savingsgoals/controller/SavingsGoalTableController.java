@@ -55,29 +55,6 @@ public class SavingsGoalTableController extends BaseController implements Initia
         super(savingsGoalManager, viewFactory, fxmlName);
     }
     
-    /*private class ColumnFormatter<S, T> implements Callback<TableColumn<S, T>, TableCell<S, T>> {
-        private final Format format;
-        
-        public ColumnFormatter(Format format) {
-            super();
-            this.format = format;
-        }
-        @Override
-        public TableCell<S, T> call(TableColumn<S, T> arg0) {
-            return new TableCell<S, T>() {
-                @Override
-                protected void updateItem(T item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (item == null || empty) {
-                        setGraphic(null);
-                    } else {
-                        setGraphic(new Label(format.format(item)));
-                    }
-                }
-            };
-        }
-    }*/
-    
     private void setUpSavingsGoalsTableView() {
         currentBalanceCol.setCellValueFactory(new PropertyValueFactory<SavingsGoalModel, Float>("currentBalanceProp"));
         daysCol.setCellValueFactory(new PropertyValueFactory<SavingsGoalModel, Integer>("daysTillPaymentProp"));
@@ -95,7 +72,6 @@ public class SavingsGoalTableController extends BaseController implements Initia
     
     private void populateSavingsGoalTableView() {
         this.savingsGoalsTable.setItems(null);
-        this.savingsGoalManager.retrieveSavingsGoals();
         this.savingsGoalsTable.setItems(this.savingsGoalManager.getSavingsGoalsList());
         
         this.savingsGoalsTable.setRowFactory(new Callback<TableView<SavingsGoalModel>, TableRow<SavingsGoalModel>>() {
@@ -144,7 +120,6 @@ public class SavingsGoalTableController extends BaseController implements Initia
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("Initializing.....");
         setUpSavingsGoalsTableView();
         populateSavingsGoalTableView();
     }

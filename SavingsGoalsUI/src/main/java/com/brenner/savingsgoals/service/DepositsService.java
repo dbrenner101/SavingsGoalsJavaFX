@@ -1,6 +1,6 @@
-package com.brenner.savingsgoals.controller.service;
+package com.brenner.savingsgoals.service;
 
-import com.brenner.savingsgoals.controller.service.model.Deposit;
+import com.brenner.savingsgoals.service.model.Deposit;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,9 +11,11 @@ public class DepositsService extends AbstractServiceManager{
     
     ObjectMapper mapper = new ObjectMapper();
     
+    private static final String DEPOSITS_BASE_URL = "/deposits";
+    
     public List<Deposit> retrieveDeposits() {
         try {
-            String response = super.doGet("/deposits");
+            String response = super.doGet(DEPOSITS_BASE_URL);
             return mapper.readValue(response, new TypeReference<List<Deposit>>() {});
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -22,7 +24,7 @@ public class DepositsService extends AbstractServiceManager{
     
     public Deposit getDeposit(Long depositId) {
         try {
-            String response = super.doGet("/deposits/" + depositId);
+            String response = super.doGet(DEPOSITS_BASE_URL + "/" + depositId);
             return mapper.readValue(response, Deposit.class);
         } catch (IOException ioe) {
             throw new RuntimeException(ioe);
@@ -31,7 +33,7 @@ public class DepositsService extends AbstractServiceManager{
     
     public Deposit saveNewDeposit(Deposit deposit) {
         try {
-            String response = super.doPost("/deposits", mapper.writeValueAsString(deposit));
+            String response = super.doPost(DEPOSITS_BASE_URL, mapper.writeValueAsString(deposit));
             return mapper.readValue(response, Deposit.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -40,7 +42,7 @@ public class DepositsService extends AbstractServiceManager{
     
     public Deposit updateDeposit(Deposit deposit) {
         try {
-            String response = super.doPut("/deposits/" + deposit.getDepositId(), mapper.writeValueAsString(deposit));
+            String response = super.doPut(DEPOSITS_BASE_URL + "/" + deposit.getDepositId(), mapper.writeValueAsString(deposit));
             return mapper.readValue(response, Deposit.class);
         } catch (IOException ioe) {
             throw new RuntimeException(ioe);
@@ -49,7 +51,7 @@ public class DepositsService extends AbstractServiceManager{
     
     public int deleteDeposit(Long depositId) {
         try {
-            int status = super.doDelete("/deposits/" + depositId, null);
+            int status = super.doDelete(DEPOSITS_BASE_URL + "/" + depositId, null);
             return status;
         } catch (IOException ioe) {
             throw new RuntimeException(ioe);

@@ -1,11 +1,14 @@
 package com.brenner.savingsgoals;
 
-import com.brenner.savingsgoals.controller.service.DepositsService;
-import com.brenner.savingsgoals.controller.service.SavingsGoalsService;
-import com.brenner.savingsgoals.controller.service.model.Deposit;
-import com.brenner.savingsgoals.controller.service.model.SavingsGoal;
 import com.brenner.savingsgoals.model.DepositModel;
 import com.brenner.savingsgoals.model.SavingsGoalModel;
+import com.brenner.savingsgoals.model.TransactionModel;
+import com.brenner.savingsgoals.service.DepositsService;
+import com.brenner.savingsgoals.service.SavingsGoalsService;
+import com.brenner.savingsgoals.service.TransactionsService;
+import com.brenner.savingsgoals.service.model.Deposit;
+import com.brenner.savingsgoals.service.model.SavingsGoal;
+import com.brenner.savingsgoals.service.model.Transaction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -21,15 +24,55 @@ public class SavingsGoalManager {
     
     SavingsGoalsService savingsGoalsService = new SavingsGoalsService();
     DepositsService depositsService = new DepositsService();
+    TransactionsService transactionsService = new TransactionsService();
     
     
     private ObservableList<SavingsGoalModel> savingsGoalsList = FXCollections.observableArrayList();
     
     private ObservableList<DepositModel> depositsList = FXCollections.observableArrayList();
     
+    private ObservableList<TransactionModel> transactionsList = FXCollections.observableArrayList();
+    
     private Integer selectedSavingsGoalIndex = null;
     
-    public void retrieveDeposits() {
+    private void retrieveTransactions() {
+        Task<List<Transaction>> retrieveTransactions = new Task<List<Transaction>>() {
+            @Override
+            protected List<Transaction> call() throws Exception {
+                return transactionsService.retrieveTransactions();
+            }
+        };
+        retrieveTransactions.run();
+        
+        retrieveTransactions.setOnSucceeded(e -> {
+            List<Transaction> transactions = retrieveTransactions.getValue();
+            if (transactions != null) {
+                List<TransactionModel> modelList = new ArrayList<>(transactions.size());
+                for (Transaction transaction : transactions) {
+                    TransactionModel model = new TransactionModel(transaction);
+                    modelList.add(model);
+                }
+                this.transactionsList.addAll(modelList);
+            }
+        });
+    }
+    
+    public void addTransaction(Transaction transaction) {
+        Task<Transaction> newTransaction = new Task<Transaction>() {
+            @Override
+            protected Transaction call() throws Exception {
+                return transactionsService.saveNewTransaction(transaction);
+            }
+        };
+        newTransaction.run();
+        
+        newTransaction.setOnSucceeded(e -> {
+            TransactionModel model = new TransactionModel(newTransaction.getValue());
+            this.transactionsList.add(model);
+        });
+    }
+    
+    private void retrieveDeposits() {
         Task<List<Deposit>> retrieveDeposits = new Task<List<Deposit>>() {
             @Override
             protected List<Deposit> call() throws Exception {
@@ -72,7 +115,7 @@ public class SavingsGoalManager {
      *
      * @TODO implement failure handling
      */
-    public void retrieveSavingsGoals() {
+    private void retrieveSavingsGoals() {
         
         Task<List<SavingsGoal>> retrieveGoals = new Task<>() {
             @Override
@@ -180,10 +223,24 @@ public class SavingsGoalManager {
     }
     
     public ObservableList<SavingsGoalModel> getSavingsGoalsList() {
+        
+        if (this.savingsGoalsList == null || this.savingsGoalsList.size() == 0) {
+            retrieveSavingsGoals();
+        }
         return savingsGoalsList;
     }
     
     public ObservableList<DepositModel> getDepositsList() {
+        if (this.depositsList == null || this.depositsList.size() == 0) {
+            retrieveDeposits();
+        }
         return depositsList;
+    }
+    
+    public ObservableList<TransactionModel> getTransactionsList() {
+        if (this.transactionsList == null || this.transactionsList.size() == 0) {
+            retrieveTransactions();
+        }
+        return transactionsList;
     }
 }

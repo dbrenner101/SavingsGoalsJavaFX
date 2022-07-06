@@ -41,8 +41,6 @@ public class DepositsListController extends BaseController implements Initializa
         
         depositDateCol.setCellFactory(new TableColumnFormatter<DepositModel, Date>(CommonUtils.STD_FORMAT));
         
-        //this.depositsView.setItems(null);
-        this.savingsGoalManager.retrieveDeposits();;
         this.depositsView.setItems(this.savingsGoalManager.getDepositsList());
     
         this.depositsView.setRowFactory(new Callback<TableView<DepositModel>, TableRow<DepositModel>>() {
@@ -54,9 +52,7 @@ public class DepositsListController extends BaseController implements Initializa
                 allocateDepositMenuItem.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
-                        /*savingsGoalManager.setSelectedSavingsGoalIndex(depositsView.getSelectionModel().getSelectedIndex());
-                        viewFactory.showAddUpdateSavingsGoals();*/
-                        System.out.println("Menu item selected");
+                        viewFactory.showDepositAllocation();
                     }
                 });
             

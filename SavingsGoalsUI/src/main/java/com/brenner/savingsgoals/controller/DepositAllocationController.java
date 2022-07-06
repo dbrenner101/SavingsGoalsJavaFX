@@ -1,42 +1,31 @@
 package com.brenner.savingsgoals.controller;
 
 import com.brenner.savingsgoals.SavingsGoalManager;
-import com.brenner.savingsgoals.model.DepositModel;
 import com.brenner.savingsgoals.model.SavingsGoalModel;
+import com.brenner.savingsgoals.util.CommonUtils;
+import com.brenner.savingsgoals.view.TableColumnFormatter;
 import com.brenner.savingsgoals.view.ViewFactory;
-import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
-import javafx.util.Callback;
+import javafx.scene.control.cell.TextFieldTableCell;
 
 import java.net.URL;
-import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 
-public class MainWindowControllerOld extends BaseController implements Initializable {
-    
-    private static final SimpleDateFormat COL_DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy");
-    
-    private Control visibleControl;
-    
-    @FXML
-    private TableColumn<DepositModel, Float> depositAmountCol;
-    
-    @FXML
-    private TableColumn<DepositModel, Date> depositDateCol;
-    
-    @FXML
-    private TableView<DepositModel> depositsView;
+public class DepositAllocationController extends BaseController implements Initializable {
     
     @FXML
     private TableView<SavingsGoalModel> savingsGoalsTable;
+    
+    @FXML
+    private TableColumn<SavingsGoalModel, String> allocatedAmountCol;
     
     @FXML
     private TableColumn<SavingsGoalModel, Float> currentBalanceCol;
@@ -65,43 +54,21 @@ public class MainWindowControllerOld extends BaseController implements Initializ
     @FXML
     private TableColumn<SavingsGoalModel, Integer> weeksCol;
     
+    @FXML
+    private Label unplannedAmount;
     
-    public MainWindowControllerOld(SavingsGoalManager savingsGoalManager, ViewFactory viewFactory, String fxmlName) {
+    public DepositAllocationController(SavingsGoalManager savingsGoalManager, ViewFactory viewFactory, String fxmlName) {
         super(savingsGoalManager, viewFactory, fxmlName);
     }
     
-    private class ColumnFormatter<S, T> implements Callback<TableColumn<S, T>, TableCell<S, T>> {
-        private final Format format;
-        
-        public ColumnFormatter(Format format) {
-            super();
-            this.format = format;
-        }
-        @Override
-        public TableCell<S, T> call(TableColumn<S, T> arg0) {
-            return new TableCell<S, T>() {
-                @Override
-                protected void updateItem(T item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (item == null || empty) {
-                        setGraphic(null);
-                    } else {
-                        setGraphic(new Label(format.format(item)));
-                    }
-                }
-            };
-        }
+    @FXML
+    void allocatedAmountUpdated(ActionEvent event) {
+        System.out.println("Allocation amount changed");
     }
     
-    private void setUpDepositTableView() {
-        depositAmountCol.setCellValueFactory(new PropertyValueFactory<DepositModel, Float>("depositAmountProp"));
-        depositDateCol.setCellValueFactory(new PropertyValueFactory<DepositModel, Date>("depositDateProp"));
-        
-        depositDateCol.setCellFactory(new ColumnFormatter<DepositModel, Date>(MainWindowControllerOld.COL_DATE_FORMAT));
-    
-        //this.depositsView.setItems(null);
-        this.savingsGoalManager.retrieveDeposits();;
-        this.depositsView.setItems(this.savingsGoalManager.getDepositsList());
+    @FXML
+    void saveAllocationAction(ActionEvent event) {
+        System.out.println("Save allocations");
     }
     
     private void setUpSavingsGoalsTableView() {
@@ -114,17 +81,32 @@ public class MainWindowControllerOld extends BaseController implements Initializ
         startDateCol.setCellValueFactory(new PropertyValueFactory<SavingsGoalModel, Date>("savingsStartDateProp"));
         targetAmountCol.setCellValueFactory(new PropertyValueFactory<SavingsGoalModel, Float>("targetAmountProp"));
         weeksCol.setCellValueFactory(new PropertyValueFactory<SavingsGoalModel, Integer>("weeksTillPaymentProp"));
-    
-        startDateCol.setCellFactory(new ColumnFormatter<SavingsGoalModel, Date>(MainWindowControllerOld.COL_DATE_FORMAT));
-        endDateCol.setCellFactory(new ColumnFormatter<SavingsGoalModel, Date>(MainWindowControllerOld.COL_DATE_FORMAT));
+        allocatedAmountCol.setCellValueFactory(new PropertyValueFactory<SavingsGoalModel, String>("allocatedAmount"));
+        
+        startDateCol.setCellFactory(new TableColumnFormatter<SavingsGoalModel, Date>(CommonUtils.STD_FORMAT));
+        endDateCol.setCellFactory(new TableColumnFormatter<SavingsGoalModel, Date>(CommonUtils.STD_FORMAT));
+        allocatedAmountCol.setCellFactory(TextFieldTableCell.forTableColumn());
+//        allocatedAmountCol.setCellFactory(new Callback<TableColumn<SavingsGoalModel, String>, TableCell<SavingsGoalModel, String>>() {
+//            @Override
+//            public TableCell<SavingsGoalModel, String> call(TableColumn<SavingsGoalModel, String> param) {
+//                return new TextFieldTableCell();
+//            }
+//        });
+        allocatedAmountCol.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<SavingsGoalModel, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<SavingsGoalModel, String> event) {
+                
+                SavingsGoalModel model = event.getRowValue();
+                model.setAllocatedAmount(event.getNewValue());
+            }
+        });
     }
     
     private void populateSavingsGoalTableView() {
         this.savingsGoalsTable.setItems(null);
-        this.savingsGoalManager.retrieveSavingsGoals();
         this.savingsGoalsTable.setItems(this.savingsGoalManager.getSavingsGoalsList());
         
-        this.savingsGoalsTable.setRowFactory(new Callback<TableView<SavingsGoalModel>, TableRow<SavingsGoalModel>>() {
+        /*this.savingsGoalsTable.setRowFactory(new Callback<TableView<SavingsGoalModel>, TableRow<SavingsGoalModel>>() {
             @Override
             public TableRow<SavingsGoalModel> call(TableView<SavingsGoalModel> param) {
                 final TableRow<SavingsGoalModel> row = new TableRow<>();
@@ -156,7 +138,7 @@ public class MainWindowControllerOld extends BaseController implements Initializ
                         }
                     }
                 });
-    
+                
                 tableRowMenu.getItems().addAll(editRowItem, deleteRowItem);
                 
                 row.contextMenuProperty().bind(
@@ -165,64 +147,12 @@ public class MainWindowControllerOld extends BaseController implements Initializ
                                 .otherwise((ContextMenu)null));
                 return row;
             }
-        });
-    }
-    
-    
-    /* MENU ACTIONS */
-    @FXML
-    void addSavingsGoalMenuAction(ActionEvent event) {
-        viewFactory.showAddUpdateSavingsGoals();
-    }
-    
-    @FXML
-    void listSavingsGoalMenuItemAction(ActionEvent event) {
-        manageControlVisibility(this.savingsGoalsTable);
-    }
-    
-    @FXML
-    void ManageTransactionMenuItemAction(ActionEvent event) {
-        System.out.println("Manage Transactions Menu Item Selected");
-    }
-    
-    @FXML
-    void addDepositMenuItemAction(ActionEvent event) {
-        viewFactory.showAddUpdateDeposits();
-    }
-    
-    @FXML
-    void manageDepositsMenuItemAction(ActionEvent event) {
-        setUpDepositTableView();
-        manageControlVisibility(this.depositsView);
-    }
-    
-    private void manageControlVisibility(Control controlToView) {
-        if (this.visibleControl != null) {
-            if (this.visibleControl.equals(this.savingsGoalsTable)) {
-                this.visibleControl.setDisable(true);
-            }
-            else {
-                this.visibleControl.setVisible(false);
-            }
-            if (controlToView.equals(this.savingsGoalsTable)) {
-                controlToView.setDisable(false);
-            }
-            else {
-                controlToView.setVisible(true);
-            }
-            this.visibleControl = controlToView;
-        }
+        });*/
     }
     
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(URL location, ResourceBundle resources) {
         setUpSavingsGoalsTableView();
         populateSavingsGoalTableView();
-    }
-    
-    @Override
-    public void postInitialization() {
-        this.visibleControl = this.savingsGoalsTable;
-        this.savingsGoalsTable.setVisible(true);
     }
 }

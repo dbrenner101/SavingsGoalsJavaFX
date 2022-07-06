@@ -1,7 +1,7 @@
 package com.brenner.savingsgoals.controller;
 
 import com.brenner.savingsgoals.SavingsGoalManager;
-import com.brenner.savingsgoals.controller.service.model.Deposit;
+import com.brenner.savingsgoals.service.model.Deposit;
 import com.brenner.savingsgoals.util.CommonUtils;
 import com.brenner.savingsgoals.view.ViewFactory;
 import javafx.event.ActionEvent;

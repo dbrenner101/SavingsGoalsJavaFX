@@ -1,6 +1,6 @@
 package com.brenner.savingsgoals.model;
 
-import com.brenner.savingsgoals.controller.service.model.Transaction;
+import com.brenner.savingsgoals.service.model.Transaction;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 

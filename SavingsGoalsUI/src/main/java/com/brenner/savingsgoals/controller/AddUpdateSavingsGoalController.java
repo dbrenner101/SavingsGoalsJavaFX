@@ -1,7 +1,7 @@
 package com.brenner.savingsgoals.controller;
 
 import com.brenner.savingsgoals.SavingsGoalManager;
-import com.brenner.savingsgoals.controller.service.model.SavingsGoal;
+import com.brenner.savingsgoals.service.model.SavingsGoal;
 import com.brenner.savingsgoals.model.SavingsGoalModel;
 import com.brenner.savingsgoals.util.CommonUtils;
 import com.brenner.savingsgoals.view.ViewFactory;

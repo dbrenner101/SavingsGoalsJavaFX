@@ -41,15 +41,17 @@ public class TransactionsListController extends BaseController implements Initia
     
     private void buildTransactionsTable() {
         amountCol.setCellValueFactory(new PropertyValueFactory<TransactionModel, Float>("amountProp"));
-        dateCol.setCellValueFactory(new PropertyValueFactory<TransactionModel, Date>("dateProp"));
+        dateCol.setCellValueFactory(new PropertyValueFactory<TransactionModel, Date>("transactionDateProp"));
         dateCol.setCellFactory(new TableColumnFormatter<TransactionModel, Date>(CommonUtils.STD_FORMAT));
         fromGoalCol.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("fromGoalProp"));
         toGoalCol.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("toGoalProp"));
         notesCol.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("notesProp"));
+        
+        this.transactionsTable.setItems(this.savingsGoalManager.getTransactionsList());
     }
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-    
+        buildTransactionsTable();
     }
 }

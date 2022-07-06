@@ -1,6 +1,6 @@
-package com.brenner.savingsgoals.controller.service;
+package com.brenner.savingsgoals.service;
 
-import com.brenner.savingsgoals.controller.service.model.SavingsGoal;
+import com.brenner.savingsgoals.service.model.SavingsGoal;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

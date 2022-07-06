@@ -29,6 +29,11 @@ public class ViewFactory {
         this.targetPane = mainWindowController.getRootPane();
     }
     
+    public void showDepositAllocation() {
+        BaseController baseController = new DepositAllocationController(this.savingsGoalManager, this, "allocateDepositView.fxml");
+        initView(baseController);
+    }
+    
     public void showTransactionList() {
         BaseController baseController = new TransactionsListController(this.savingsGoalManager, this, "transactionsList.fxml");
         initView(baseController);

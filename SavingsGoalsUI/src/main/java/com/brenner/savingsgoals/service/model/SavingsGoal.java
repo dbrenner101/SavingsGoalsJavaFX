@@ -1,4 +1,4 @@
-package com.brenner.savingsgoals.controller.service.model;
+package com.brenner.savingsgoals.service.model;
 
 import java.util.Date;
 

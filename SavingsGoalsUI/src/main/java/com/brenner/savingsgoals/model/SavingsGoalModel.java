@@ -1,6 +1,6 @@
 package com.brenner.savingsgoals.model;
 
-import com.brenner.savingsgoals.controller.service.model.SavingsGoal;
+import com.brenner.savingsgoals.service.model.SavingsGoal;
 import com.brenner.savingsgoals.util.CommonUtils;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -29,6 +29,8 @@ public class SavingsGoalModel implements Comparable<SavingsGoalModel> {
     private final SimpleStringProperty initialBalanceProp;
     
     private final SimpleStringProperty currentBalanceProp;
+    
+    private String allocatedAmount;
     
     private final SavingsGoal savingsGoal;
     
@@ -140,6 +142,14 @@ public class SavingsGoalModel implements Comparable<SavingsGoalModel> {
     
     public SavingsGoal getSavingsGoal() {
         return savingsGoal;
+    }
+    
+    public String getAllocatedAmount() {
+        return allocatedAmount;
+    }
+    
+    public void setAllocatedAmount(String allocatedAmount) {
+        this.allocatedAmount = allocatedAmount;
     }
     
     @Override

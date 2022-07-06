@@ -25,7 +25,7 @@ module com.brenner.savingsgoals {
     opens com.brenner.savingsgoals.view;
     
     exports com.brenner.savingsgoals.model;
-    exports com.brenner.savingsgoals.controller.service.model;
+    exports com.brenner.savingsgoals.service.model;
     //opens com.brenner.savingsgoals.model;
     
     /*opens com.brenner.savingsgoals to javafx.fxml;
