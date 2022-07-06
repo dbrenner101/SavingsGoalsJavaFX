@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1001.0" prefWidth="1155.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MenuBar layoutX="4.0" layoutY="7.0" prefHeight="28.0" prefWidth="1137.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Savings Goals">
+            <items>
+                  <MenuItem mnemonicParsing="false" onAction="#listSavingsGoalMenuItemAction" text="List Savings Goals" />
+              <MenuItem mnemonicParsing="false" onAction="#addSavingsGoalMenuAction" text="Add Savings Goal" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Deposits">
+            <items>
+                  <MenuItem mnemonicParsing="false" onAction="#manageDepositsMenuItemAction" text="List Deposits" />
+                  <MenuItem mnemonicParsing="false" onAction="#addDepositMenuItemAction" text="Add Deposit" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Transactions">
+            <items>
+                  <MenuItem mnemonicParsing="false" onAction="#ManageTransactionMenuItemAction" text="Manage Transactions" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <TableView fx:id="savingsGoalsTable" layoutX="14.0" layoutY="48.0" prefHeight="873.0" prefWidth="1129.0" visible="false">
+        <columns>
+          <TableColumn fx:id="savingsGoalCol" prefWidth="280.0" text="Savings Goal" />
+          <TableColumn fx:id="startDateCol" prefWidth="101.0" text="Start Date" />
+            <TableColumn fx:id="endDateCol" prefWidth="120.0" text="End Date" />
+            <TableColumn fx:id="targetAmountCol" prefWidth="113.0" text="Target Amount" />
+            <TableColumn fx:id="initialBalanceCol" prefWidth="135.0" text="Initial Balance" />
+            <TableColumn fx:id="weeksCol" prefWidth="86.0" text="Weeks" />
+            <TableColumn fx:id="savingsPerWeekCol" prefWidth="117.0" text="Savings per Week" />
+            <TableColumn fx:id="daysCol" prefWidth="64.0" text="Days" />
+            <TableColumn fx:id="currentBalanceCol" prefWidth="112.0" text="Current Balance" />
+        </columns>
+      </TableView>
+      <TableView fx:id="depositsView" layoutX="5.0" layoutY="41.0" prefHeight="293.0" prefWidth="337.0" visible="false">
+        <columns>
+          <TableColumn fx:id="depositDateCol" prefWidth="161.0" text="Deposit Date" />
+          <TableColumn fx:id="depositAmountCol" prefWidth="173.0" text="Deposit Amount" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
