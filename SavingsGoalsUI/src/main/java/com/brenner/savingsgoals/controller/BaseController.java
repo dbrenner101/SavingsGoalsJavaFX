@@ -4,6 +4,9 @@ import com.brenner.savingsgoals.SavingsGoalManager;
 import com.brenner.savingsgoals.view.ViewFactory;
 import javafx.fxml.Initializable;
 
+/**
+ * Parent of the controllers
+ */
 public abstract class BaseController implements Initializable {
     
     protected SavingsGoalManager savingsGoalManager;

@@ -19,6 +19,13 @@ import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+/**
+ * Controller supporting interactions with the SavingsGoal list. List includes a context menu to edit the Savings Goal
+ * details which launch in the AddUpdateSavingsGoal... The same functionality is also available via a double click on
+ * any active row.
+ *
+ * The table is backed by an Observable list managed by the SavingsGoalManager
+ */
 public class SavingsGoalTableController extends BaseController implements Initializable {
     
     @FXML

@@ -15,6 +15,12 @@ import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+/**
+ * Controller to manage behavior and interactions with the list of transactions. The transactions table is backed by
+ * and Observable list managed by the SavingsGoalManager
+ *
+ * @TODO Add, delete capability from the table via a context menu on each row.
+ */
 public class TransactionsListController extends BaseController implements Initializable {
     
     @FXML

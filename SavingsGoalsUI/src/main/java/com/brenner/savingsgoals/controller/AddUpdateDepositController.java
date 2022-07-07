@@ -17,6 +17,10 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+/**
+ * Controller to manage the add/update deposit scene. Includes a validator implementation that enforces required data
+ * and data type.
+ */
 public class AddUpdateDepositController extends BaseController implements Initializable {
     
     Validator validator = new Validator();

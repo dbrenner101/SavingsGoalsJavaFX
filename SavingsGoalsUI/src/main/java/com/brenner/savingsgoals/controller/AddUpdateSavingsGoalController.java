@@ -21,6 +21,10 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+/**
+ * Controller to handle the add/update scene and behavior. Includes a validator implementation that enforces required data
+ * and data type.
+ */
 public class AddUpdateSavingsGoalController extends BaseController implements Initializable {
     
     Validator validator = new Validator();
@@ -72,8 +76,6 @@ public class AddUpdateSavingsGoalController extends BaseController implements In
     }
     
     private void buildValidator() {
-    
-        
         validator.createCheck().dependsOn("goalName", goalNameTextField.textProperty())
                 .withMethod(c -> {
                     String goalName = c.get("goalName");

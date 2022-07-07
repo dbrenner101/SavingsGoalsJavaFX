@@ -24,6 +24,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * Controller to handle management of the allocation to each goal. When the scene is initialized each goal is allocated
+ * it's expected weekly target amount. The default goal is incremented/decremented by the balance. The allocation column
+ * is editable allowing for the default allocation amount to be changed. The default goal amount will update dynamically
+ * as the allocation amounts are changed. Nothing is persisted until the save button is clicked.
+ */
 public class DepositAllocationController extends BaseController implements Initializable {
     
     @FXML

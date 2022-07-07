@@ -17,6 +17,11 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+/**
+ * Controller to handle the add (edit) transaction.
+ *
+ * @TODO add validator
+ */
 public class AddEditTransactionController extends BaseController implements Initializable {
     
     @FXML

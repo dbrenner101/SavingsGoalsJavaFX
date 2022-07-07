@@ -11,6 +11,10 @@ import javafx.scene.layout.AnchorPane;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller than handles interactions with the parent window/stage. This includes the menu options which are
+ * the primary navigation tools in the UI. Delegation of view initialization and display are left to the ViewFactory
+ */
 public class MainWindowController extends BaseController implements Initializable {
     
     @FXML
