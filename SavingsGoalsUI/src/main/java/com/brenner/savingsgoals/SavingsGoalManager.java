@@ -8,6 +8,7 @@ import com.brenner.savingsgoals.service.SavingsGoalsService;
 import com.brenner.savingsgoals.service.TransactionsService;
 import com.brenner.savingsgoals.service.model.Deposit;
 import com.brenner.savingsgoals.service.model.SavingsGoal;
+import com.brenner.savingsgoals.service.model.SavingsGoalDepositAllocation;
 import com.brenner.savingsgoals.service.model.Transaction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,14 +27,15 @@ public class SavingsGoalManager {
     DepositsService depositsService = new DepositsService();
     TransactionsService transactionsService = new TransactionsService();
     
+    private Integer selectedSavingsGoalIndex = null;
+    
+    private DepositModel selectedDepositModel;
     
     private ObservableList<SavingsGoalModel> savingsGoalsList = FXCollections.observableArrayList();
     
     private ObservableList<DepositModel> depositsList = FXCollections.observableArrayList();
     
     private ObservableList<TransactionModel> transactionsList = FXCollections.observableArrayList();
-    
-    private Integer selectedSavingsGoalIndex = null;
     
     private void retrieveTransactions() {
         Task<List<Transaction>> retrieveTransactions = new Task<List<Transaction>>() {
@@ -70,6 +72,8 @@ public class SavingsGoalManager {
             TransactionModel model = new TransactionModel(newTransaction.getValue());
             this.transactionsList.add(model);
         });
+        
+        this.retrieveSavingsGoalsAsync();
     }
     
     private void retrieveDeposits() {
@@ -115,7 +119,7 @@ public class SavingsGoalManager {
      *
      * @TODO implement failure handling
      */
-    private void retrieveSavingsGoals() {
+    private void retrieveSavingsGoalsAsync() {
         
         Task<List<SavingsGoal>> retrieveGoals = new Task<>() {
             @Override
@@ -132,9 +136,20 @@ public class SavingsGoalManager {
                 for (SavingsGoal goal : savingsGoals) {
                     modelGoals.add(new SavingsGoalModel(goal));
                 }
-                savingsGoalsList.addAll(modelGoals);
+                savingsGoalsList.setAll(modelGoals);
             }
         });
+    }
+    
+    private void retrieveSavingsGoalsBlocking() {
+        List<SavingsGoal> savingsGoals = savingsGoalsService.retrieveSavingsGoals();
+        if (savingsGoals != null) {
+            List<SavingsGoalModel> modelGoals = new ArrayList<>(savingsGoals.size());
+            for (SavingsGoal goal : savingsGoals) {
+                modelGoals.add(new SavingsGoalModel(goal));
+            }
+            savingsGoalsList.addAll(modelGoals);
+        }
     }
     
     /**
@@ -214,6 +229,29 @@ public class SavingsGoalManager {
         });
     }
     
+    public SavingsGoalModel getDefaultGoal() {
+        
+        SavingsGoal goal = this.savingsGoalsService.getDefaultGoal();
+        return new SavingsGoalModel(goal);
+    }
+    
+    public void allocateDepositToGoals(List<SavingsGoalModel> savingsGoalModels) {
+        
+        List<SavingsGoalDepositAllocation> savingsGoalAllocations = new ArrayList<>(savingsGoalModels.size());
+        
+        for (SavingsGoalModel model : savingsGoalModels) {
+            SavingsGoalDepositAllocation allocation = new SavingsGoalDepositAllocation(
+                    model.getSavingsGoalId(),
+                    this.selectedDepositModel.getDeposit().getDepositId(),
+                    Float.valueOf(model.getAllocatedAmount()));
+            savingsGoalAllocations.add(allocation);
+        }
+        
+        this.savingsGoalsService.allocateDepositToGoals(savingsGoalAllocations);
+        this.retrieveSavingsGoalsAsync();
+        this.retrieveDeposits();
+    }
+    
     public Integer getSelectedSavingsGoalIndex() {
         return selectedSavingsGoalIndex;
     }
@@ -222,10 +260,15 @@ public class SavingsGoalManager {
         this.selectedSavingsGoalIndex = selectedSavingsGoalIndex;
     }
     
-    public ObservableList<SavingsGoalModel> getSavingsGoalsList() {
+    public ObservableList<SavingsGoalModel> getSavingsGoalsList(boolean async) {
         
         if (this.savingsGoalsList == null || this.savingsGoalsList.size() == 0) {
-            retrieveSavingsGoals();
+            if (async) {
+                retrieveSavingsGoalsAsync();
+            }
+            else {
+                retrieveSavingsGoalsBlocking();
+            }
         }
         return savingsGoalsList;
     }
@@ -242,5 +285,13 @@ public class SavingsGoalManager {
             retrieveTransactions();
         }
         return transactionsList;
+    }
+    
+    public DepositModel getSelectedDepositModel() {
+        return selectedDepositModel;
+    }
+    
+    public void setSelectedDepositModel(DepositModel selectedDepositModel) {
+        this.selectedDepositModel = selectedDepositModel;
     }
 }

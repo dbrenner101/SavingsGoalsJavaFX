@@ -1,6 +1,7 @@
 package com.brenner.savingsgoals.controller;
 
 import com.brenner.savingsgoals.SavingsGoalManager;
+import com.brenner.savingsgoals.model.DepositModel;
 import com.brenner.savingsgoals.model.SavingsGoalModel;
 import com.brenner.savingsgoals.util.CommonUtils;
 import com.brenner.savingsgoals.view.TableColumnFormatter;
@@ -16,7 +17,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 
 import java.net.URL;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class DepositAllocationController extends BaseController implements Initializable {
@@ -55,7 +60,10 @@ public class DepositAllocationController extends BaseController implements Initi
     private TableColumn<SavingsGoalModel, Integer> weeksCol;
     
     @FXML
-    private Label unplannedAmount;
+    private Label defaultGoalName;
+    
+    @FXML
+    private Label defaultGoalAmount;
     
     public DepositAllocationController(SavingsGoalManager savingsGoalManager, ViewFactory viewFactory, String fxmlName) {
         super(savingsGoalManager, viewFactory, fxmlName);
@@ -68,7 +76,7 @@ public class DepositAllocationController extends BaseController implements Initi
     
     @FXML
     void saveAllocationAction(ActionEvent event) {
-        System.out.println("Save allocations");
+        this.savingsGoalManager.allocateDepositToGoals(this.savingsGoalsTable.getItems());
     }
     
     private void setUpSavingsGoalsTableView() {
@@ -86,73 +94,51 @@ public class DepositAllocationController extends BaseController implements Initi
         startDateCol.setCellFactory(new TableColumnFormatter<SavingsGoalModel, Date>(CommonUtils.STD_FORMAT));
         endDateCol.setCellFactory(new TableColumnFormatter<SavingsGoalModel, Date>(CommonUtils.STD_FORMAT));
         allocatedAmountCol.setCellFactory(TextFieldTableCell.forTableColumn());
-//        allocatedAmountCol.setCellFactory(new Callback<TableColumn<SavingsGoalModel, String>, TableCell<SavingsGoalModel, String>>() {
-//            @Override
-//            public TableCell<SavingsGoalModel, String> call(TableColumn<SavingsGoalModel, String> param) {
-//                return new TextFieldTableCell();
-//            }
-//        });
         allocatedAmountCol.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<SavingsGoalModel, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<SavingsGoalModel, String> event) {
-                
                 SavingsGoalModel model = event.getRowValue();
+                try {
+                    updateDefaultGoalAmount(model.getAllocatedAmount(), event.getNewValue());
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
                 model.setAllocatedAmount(event.getNewValue());
             }
         });
     }
     
+    private void updateDefaultGoalAmount(String oldAmountStr, String newAmountStr) throws ParseException {
+        float oldAmount = Float.parseFloat(oldAmountStr);
+        float newAmount = Float.parseFloat(newAmountStr);
+        float diff = oldAmount - newAmount;
+        String currentAmountString = this.defaultGoalAmount.getText();
+        float currentDefaultAmount = NumberFormat.getCurrencyInstance(Locale.US).parse(currentAmountString).floatValue() + diff;
+        this.defaultGoalAmount.setText(CommonUtils.formatAsCurrency(currentDefaultAmount));
+    }
+    
     private void populateSavingsGoalTableView() {
         this.savingsGoalsTable.setItems(null);
-        this.savingsGoalsTable.setItems(this.savingsGoalManager.getSavingsGoalsList());
+        List<SavingsGoalModel> savingsGoals = this.savingsGoalManager.getSavingsGoalsList(false);
+        DepositModel depositModel = this.savingsGoalManager.getSelectedDepositModel();
+        Float depositAmount = depositModel.getDeposit().getAmount();
+        Float remainingDeposit = depositAmount;
+        for (SavingsGoalModel savingsGoal : savingsGoals) {
+            Float goalWeeklyAmount = savingsGoal.getSavingsGoal().getSavingsPerWeek();
+            savingsGoal.setAllocatedAmount(goalWeeklyAmount.toString());
+            remainingDeposit = remainingDeposit - goalWeeklyAmount;
+        }
+        this.savingsGoalsTable.setItems(this.savingsGoalManager.getSavingsGoalsList(true));
         
-        /*this.savingsGoalsTable.setRowFactory(new Callback<TableView<SavingsGoalModel>, TableRow<SavingsGoalModel>>() {
-            @Override
-            public TableRow<SavingsGoalModel> call(TableView<SavingsGoalModel> param) {
-                final TableRow<SavingsGoalModel> row = new TableRow<>();
-                final ContextMenu tableRowMenu = new ContextMenu();
-                final MenuItem editRowItem = new MenuItem("Edit Goal");
-                editRowItem.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        savingsGoalManager.setSelectedSavingsGoalIndex(savingsGoalsTable.getSelectionModel().getSelectedIndex());
-                        viewFactory.showAddUpdateSavingsGoals();
-                    }
-                });
-                
-                final MenuItem deleteRowItem = new MenuItem("Delete Goal");
-                deleteRowItem.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        savingsGoalManager.setSelectedSavingsGoalIndex(savingsGoalsTable.getSelectionModel().getSelectedIndex());
-                        savingsGoalManager.deleteSavingsGoal(row.getItem().getSavingsGoal());
-                    }
-                });
-                
-                row.setOnMouseClicked(e -> {
-                    if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2) {
-                        int index = savingsGoalsTable.getSelectionModel().getSelectedIndex();
-                        if (index >= 0) {
-                            savingsGoalManager.setSelectedSavingsGoalIndex(index);
-                            viewFactory.showAddUpdateSavingsGoals();
-                        }
-                    }
-                });
-                
-                tableRowMenu.getItems().addAll(editRowItem, deleteRowItem);
-                
-                row.contextMenuProperty().bind(
-                        Bindings.when(Bindings.isNotNull(row.itemProperty()))
-                                .then(tableRowMenu)
-                                .otherwise((ContextMenu)null));
-                return row;
-            }
-        });*/
+        this.defaultGoalAmount.setText(remainingDeposit.toString());
     }
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setUpSavingsGoalsTableView();
         populateSavingsGoalTableView();
+        SavingsGoalModel defaultGoal = this.savingsGoalManager.getDefaultGoal();
+        this.defaultGoalName.setText(defaultGoal.getSavingsGoal().getGoalName());
+        this.defaultGoalAmount.setText(CommonUtils.formatAsCurrency(defaultGoal.getSavingsGoal().getCurrentBalance()));
     }
 }

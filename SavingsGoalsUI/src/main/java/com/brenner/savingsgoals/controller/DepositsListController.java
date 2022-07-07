@@ -52,6 +52,8 @@ public class DepositsListController extends BaseController implements Initializa
                 allocateDepositMenuItem.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
+                        DepositModel selectedModel = depositsView.getSelectionModel().getSelectedItem();
+                        savingsGoalManager.setSelectedDepositModel(selectedModel);
                         viewFactory.showDepositAllocation();
                     }
                 });

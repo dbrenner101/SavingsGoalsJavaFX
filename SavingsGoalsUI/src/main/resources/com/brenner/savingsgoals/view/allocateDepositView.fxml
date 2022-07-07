@@ -9,7 +9,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1001.0" prefWidth="1305.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TableView fx:id="savingsGoalsTable" layoutX="14.0" layoutY="104.0" prefHeight="817.0" prefWidth="1261.0" editable="true">
+      <TableView fx:id="savingsGoalsTable" editable="true" layoutX="14.0" layoutY="104.0" prefHeight="817.0" prefWidth="1261.0">
         <columns>
           <TableColumn fx:id="savingsGoalCol" editable="false" prefWidth="280.0" text="Savings Goal" />
           <TableColumn fx:id="startDateCol" editable="false" prefWidth="101.0" text="Start Date" />
@@ -20,7 +20,7 @@
             <TableColumn fx:id="savingsPerWeekCol" editable="false" prefWidth="117.0" text="Savings per Week" />
             <TableColumn fx:id="daysCol" editable="false" prefWidth="64.0" text="Days" />
             <TableColumn fx:id="currentBalanceCol" editable="false" prefWidth="112.0" text="Current Balance" />
-            <TableColumn fx:id="allocatedAmountCol" onEditCommit="#allocatedAmountUpdated" prefWidth="112.0" text="Allocated Amount" editable="true" />
+            <TableColumn fx:id="allocatedAmountCol" editable="true" onEditCommit="#allocatedAmountUpdated" prefWidth="112.0" text="Allocated Amount" />
         </columns>
       </TableView>
       <Label layoutX="525.0" layoutY="14.0" text="Allocate Deposit">
@@ -28,8 +28,9 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="31.0" layoutY="72.0" text="Unplanned" />
-      <Label fx:id="unplannedAmount" layoutX="112.0" layoutY="72.0" prefHeight="17.0" prefWidth="84.0" />
+      <Label layoutX="31.0" layoutY="72.0" text="Default Goal" />
+      <Label fx:id="defaultGoalName" layoutX="112.0" layoutY="72.0" prefHeight="17.0" prefWidth="84.0" />
       <Button fx:id="saveAllocationButton" layoutX="1098.0" layoutY="68.0" mnemonicParsing="false" onAction="#saveAllocationAction" text="Save" />
+      <Label fx:id="defaultGoalAmount" layoutX="214.0" layoutY="72.0" prefHeight="17.0" prefWidth="68.0" />
    </children>
 </AnchorPane>

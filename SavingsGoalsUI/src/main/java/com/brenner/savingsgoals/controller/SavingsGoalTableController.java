@@ -72,7 +72,7 @@ public class SavingsGoalTableController extends BaseController implements Initia
     
     private void populateSavingsGoalTableView() {
         this.savingsGoalsTable.setItems(null);
-        this.savingsGoalsTable.setItems(this.savingsGoalManager.getSavingsGoalsList());
+        this.savingsGoalsTable.setItems(this.savingsGoalManager.getSavingsGoalsList(true));
         
         this.savingsGoalsTable.setRowFactory(new Callback<TableView<SavingsGoalModel>, TableRow<SavingsGoalModel>>() {
             @Override
