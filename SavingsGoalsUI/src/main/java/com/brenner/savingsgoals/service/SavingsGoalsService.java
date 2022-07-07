@@ -8,9 +8,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * REST client for the Savings Goals API
+ */
 public class SavingsGoalsService extends AbstractServiceManager {
-    ObjectMapper mapper = new ObjectMapper();
     
+    private ObjectMapper mapper = new ObjectMapper();
+    
+    /**
+     * API call to allocate pieces of a deposit to individual goals.
+     *
+     * @param savingsGoalAllocations A list of the objects that encapsulate the allocations
+     */
     public void allocateDepositToGoals(List<SavingsGoalDepositAllocation> savingsGoalAllocations) {
         try {
             super.doPut("/savingsgoals/allocateDeposit", mapper.writeValueAsString(savingsGoalAllocations));
@@ -19,6 +28,11 @@ public class SavingsGoalsService extends AbstractServiceManager {
         }
     }
     
+    /**
+     * API call to retrieve the default goal.
+     *
+     * @return The Savings Goal designated as default
+     */
     public SavingsGoal getDefaultGoal() {
         try {
             String response = super.doGet("/savingsgoals/defaultgoal");
@@ -28,6 +42,11 @@ public class SavingsGoalsService extends AbstractServiceManager {
         }
     }
     
+    /**
+     * API call to retrieve the list of savings goals.
+     *
+     * @return The list of savings goals
+     */
     public List<SavingsGoal> retrieveSavingsGoals() {
         
         List<SavingsGoal> allSavingsGoals;
@@ -42,6 +61,12 @@ public class SavingsGoalsService extends AbstractServiceManager {
         return allSavingsGoals;
     }
     
+    /**
+     * API call to update a savings goal
+     *
+     * @param savingsGoal Goal with unique identifier to update
+     * @return The SavingsGoal back from the API
+     */
     public SavingsGoal updateSavingsGoal(SavingsGoal savingsGoal) {
         try {
             String response = super.doPut("/savingsgoals/" + savingsGoal.getSavingsGoalId(), mapper.writeValueAsString(savingsGoal));
@@ -51,6 +76,12 @@ public class SavingsGoalsService extends AbstractServiceManager {
         }
     }
     
+    /**
+     * API call to add a new savings goal
+     *
+     * @param newSavingsGoal Goal to create/save
+     * @return The SavingsGoal back from the API
+     */
     public SavingsGoal addNewSavingsGoal(SavingsGoal newSavingsGoal) {
         
         SavingsGoal newGoal;
@@ -65,6 +96,11 @@ public class SavingsGoalsService extends AbstractServiceManager {
         return newGoal;
     }
     
+    /**
+     * API call to delete a savings goal.
+     *
+     * @param savingsGoalId The HTTP status call (API returns no value)
+     */
     public void deleteSavingsGoal(Integer savingsGoalId) {
         try {
             int status = super.doDelete("/savingsgoals/" + savingsGoalId, null);
