@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
+import javafx.stage.Modality;
 import javafx.util.Callback;
 
 import java.net.URL;
@@ -65,19 +66,31 @@ public class DepositsListController extends BaseController implements Initializa
                         viewFactory.showDepositAllocation();
                     }
                 });
+                
+                final MenuItem deleteDepositItem = new MenuItem("Delete");
+                deleteDepositItem.setOnAction(e -> {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.initModality(Modality.APPLICATION_MODAL);
+                    alert.showAndWait().ifPresent(type -> {
+                        System.out.println(type.getButtonData().getTypeCode());
+                        if (type.getButtonData().equals(ButtonBar.ButtonData.OK_DONE)) {
+                                DepositModel selectedModel = depositsView.getSelectionModel().getSelectedItem();
+                                savingsGoalManager.deleteDeposit(selectedModel.getDeposit());
+                        }
+                    });
+                });
             
                 row.setOnMouseClicked(e -> {
                     if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2) {
                         int index = depositsView.getSelectionModel().getSelectedIndex();
                         if (index >= 0) {
-                            /*savingsGoalManager.setSelectedSavingsGoalIndex(index);
-                            viewFactory.showAddUpdateSavingsGoals();*/
-                            System.out.println("Double click - edit");
+                            savingsGoalManager.setSelectedDepositModel(depositsView.getSelectionModel().getSelectedItem());
+                            viewFactory.showAddUpdateDeposits();
                         }
                     }
                 });
             
-                tableRowMenu.getItems().addAll(allocateDepositMenuItem);
+                tableRowMenu.getItems().addAll(allocateDepositMenuItem, deleteDepositItem);
             
                 row.contextMenuProperty().bind(
                         Bindings.when(Bindings.isNotNull(row.itemProperty()))

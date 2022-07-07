@@ -125,10 +125,76 @@ public class SavingsGoalManager {
     }
     
     /**
+     * Method to call delete deposit on API. After successful deletion the deposits list is refreshed.
+     *
+     * @param deposit The deposit to delete, must include depositId
+     */
+    public void deleteDeposit(Deposit deposit) {
+        
+        Task<Deposit> depositTask = new Task<Deposit>() {
+            @Override
+            protected Deposit call() throws Exception {
+                depositsService.deleteDeposit(deposit.getDepositId());
+                return null;
+            }
+        };
+        depositTask.run();
+        
+        depositTask.setOnSucceeded(e -> {
+            retrieveDeposits();
+        });
+        
+        depositTask.setOnFailed(e -> {
+            Alert alert = createErrorAlert("Delete deposit failed: " + depositTask.getException().getMessage());
+            alert.show();
+        });
+    }
+    
+    /**
+     * Entry point for saving or updating a deposit. A deposit with a depositId will be updated otherwise added.
+     *
+     * @param deposit Objext to persist
+     */
+    public void saveDeposit(Deposit deposit) {
+        if (deposit.getDepositId() != null) {
+            updateDeposit(deposit);
+        }
+        else {
+            addDeposit(deposit);
+        }
+    }
+    
+    /**
+     * Async method to update a deposit
+     *
+     * @param deposit The container for the deposit data to update
+     */
+    private void updateDeposit(Deposit deposit) {
+        Task<Deposit> updateDepositTask = new Task<Deposit>() {
+            @Override
+            protected Deposit call() throws Exception {
+                return depositsService.updateDeposit(deposit);
+            }
+        };
+        updateDepositTask.run();
+        
+        updateDepositTask.setOnSucceeded(e -> {
+            Deposit result = updateDepositTask.getValue();
+            this.selectedDepositModel = null;
+            retrieveDeposits();
+        });
+        
+        updateDepositTask.setOnFailed(e -> {
+            Alert alert = createErrorAlert("Update deposit failed: " + updateDepositTask.getException().getMessage());
+            alert.show();
+        });
+    }
+    
+    /**
      * Support for passing a new deposit object to the backend for saving. Runs on a new thread.
      * @param deposit
      */
-    public void addDeposit(Deposit deposit) {
+    private void addDeposit(Deposit deposit) {
         
         Task<Deposit> addDeposit = new Task<Deposit>() {
             @Override

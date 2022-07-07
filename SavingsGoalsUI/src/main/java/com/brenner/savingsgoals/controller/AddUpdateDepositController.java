@@ -1,6 +1,7 @@
 package com.brenner.savingsgoals.controller;
 
 import com.brenner.savingsgoals.SavingsGoalManager;
+import com.brenner.savingsgoals.model.DepositModel;
 import com.brenner.savingsgoals.service.model.Deposit;
 import com.brenner.savingsgoals.util.CommonUtils;
 import com.brenner.savingsgoals.view.ViewFactory;
@@ -56,7 +57,11 @@ public class AddUpdateDepositController extends BaseController implements Initia
             Float depositAmount = Float.valueOf(depositAmountField.getText());
     
             Deposit deposit = new Deposit(depositAmount, depositDate);
-            this.savingsGoalManager.addDeposit(deposit);
+            DepositModel selectedDepositModel = this.savingsGoalManager.getSelectedDepositModel();
+            if (selectedDepositModel != null) {
+                deposit.setDepositId(selectedDepositModel.getDeposit().getDepositId());
+            }
+            this.savingsGoalManager.saveDeposit(deposit);
     
             super.viewFactory.showDepositsList();
         }
@@ -94,6 +99,11 @@ public class AddUpdateDepositController extends BaseController implements Initia
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        if (savingsGoalManager.getSelectedDepositModel() != null) {
+            Deposit deposit = savingsGoalManager.getSelectedDepositModel().getDeposit();
+            this.depositDatePicker.getEditor().setText(CommonUtils.formatDateToStdString(deposit.getDate()));
+            this.depositAmountField.setText(deposit.getAmount().toString());
+        }
         buildValidator();
     }
 }
