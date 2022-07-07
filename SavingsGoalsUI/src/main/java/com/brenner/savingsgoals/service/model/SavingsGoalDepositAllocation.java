@@ -1,5 +1,8 @@
 package com.brenner.savingsgoals.service.model;
 
+/**
+ * Service object for a SavingsGoalDepositAllocation that acts in a DTO capacity.
+ */
 public class SavingsGoalDepositAllocation {
     Integer savingsGoalId;
     Long depositId;

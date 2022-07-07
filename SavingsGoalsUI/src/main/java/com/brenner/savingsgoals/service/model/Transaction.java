@@ -2,6 +2,9 @@ package com.brenner.savingsgoals.service.model;
 
 import java.util.Date;
 
+/**
+ * Service object for a Transaction that acts in a DTO capacity.
+ */
 public class Transaction {
     private Long transactionId;
     

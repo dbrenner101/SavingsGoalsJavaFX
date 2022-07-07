@@ -2,6 +2,9 @@ package com.brenner.savingsgoals.service.model;
 
 import java.util.Date;
 
+/**
+ * Service object for a SavingsGoal that acts in a DTO capacity.
+ */
 public class SavingsGoal {
     
     private Integer savingsGoalId;
