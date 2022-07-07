@@ -7,6 +7,11 @@ import javafx.util.Callback;
 
 import java.text.Format;
 
+/**
+ * Coommon class to update a table column using the supplied values
+ * @param <S>
+ * @param <T>
+ */
 public class TableColumnFormatter<S, T> implements Callback<TableColumn<S, T>, TableCell<S, T>> {
     private final Format format;
     
