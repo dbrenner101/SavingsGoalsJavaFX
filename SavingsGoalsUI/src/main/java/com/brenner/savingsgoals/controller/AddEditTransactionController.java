@@ -56,8 +56,8 @@ public class AddEditTransactionController extends BaseController implements Init
     }
     
     private void initChoiceBoxes() {
-        this.fromGoalSelection.setItems(super.savingsGoalManager.getSavingsGoalsList());
-        this.toGoalSelection.setItems(super.savingsGoalManager.getSavingsGoalsList());
+        this.fromGoalSelection.setItems(super.savingsGoalManager.getSavingsGoalsList(true));
+        this.toGoalSelection.setItems(super.savingsGoalManager.getSavingsGoalsList(true));
         
         this.fromGoalSelection.setConverter(new StringConverter<SavingsGoalModel>() {
             @Override

@@ -180,7 +180,7 @@ public class AddUpdateSavingsGoalController extends BaseController implements In
     private SavingsGoal buildDataObject() {
         SavingsGoal savingsGoal = null;
         if (this.savingsGoalManager.getSelectedSavingsGoalIndex() != null) {
-            savingsGoal = this.savingsGoalManager.getSavingsGoalsList().get(this.savingsGoalManager.getSelectedSavingsGoalIndex()).getSavingsGoal();
+            savingsGoal = this.savingsGoalManager.getSavingsGoalsList(true).get(this.savingsGoalManager.getSelectedSavingsGoalIndex()).getSavingsGoal();
         }
         else {
             savingsGoal = new SavingsGoal();
@@ -223,7 +223,7 @@ public class AddUpdateSavingsGoalController extends BaseController implements In
     public void initialize(URL url, ResourceBundle resourceBundle) {
         
         if (this.savingsGoalManager.getSelectedSavingsGoalIndex() != null) {
-            SavingsGoalModel selectedItem = this.savingsGoalManager.getSavingsGoalsList().get(this.savingsGoalManager.getSelectedSavingsGoalIndex());
+            SavingsGoalModel selectedItem = this.savingsGoalManager.getSavingsGoalsList(true).get(this.savingsGoalManager.getSelectedSavingsGoalIndex());
             SavingsGoal goal = selectedItem.getSavingsGoal();
             this.goalNameTextField.setText(goal.getGoalName());
             this.initialAmountTextField.setText(goal.getInitialBalance() != null ? goal.getInitialBalance().toString() : "");
