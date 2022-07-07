@@ -7,6 +7,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Launch point for the application
+ */
 public class Launcher extends Application {
     
     Stage window;
@@ -18,15 +21,6 @@ public class Launcher extends Application {
     
         ViewFactory viewFactory = new ViewFactory(new SavingsGoalManager());
         viewFactory.showMainWindow();
-        
-    
-        /*URL file = getClass().getResource("Parent.fxml");
-        FXMLLoader fxmlLoader = new FXMLLoader(file);
-        fxmlLoader.setController(new ParentController(window));
-        Parent parent = fxmlLoader.load();
-        Scene scene = new Scene(parent);
-        window.setScene(scene);
-        window.show();*/
     }
     
     public static void main(String[] args) {

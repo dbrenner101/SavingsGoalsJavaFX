@@ -13,6 +13,7 @@ import com.brenner.savingsgoals.service.model.Transaction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,20 +24,21 @@ import java.util.List;
  */
 public class SavingsGoalManager {
     
-    SavingsGoalsService savingsGoalsService = new SavingsGoalsService();
-    DepositsService depositsService = new DepositsService();
-    TransactionsService transactionsService = new TransactionsService();
+    private SavingsGoalsService savingsGoalsService = new SavingsGoalsService();
+    private DepositsService depositsService = new DepositsService();
+    private TransactionsService transactionsService = new TransactionsService();
     
     private Integer selectedSavingsGoalIndex = null;
-    
     private DepositModel selectedDepositModel;
     
     private ObservableList<SavingsGoalModel> savingsGoalsList = FXCollections.observableArrayList();
-    
     private ObservableList<DepositModel> depositsList = FXCollections.observableArrayList();
-    
     private ObservableList<TransactionModel> transactionsList = FXCollections.observableArrayList();
     
+    /**
+     * Call to retrieve transactions and populate the transactions list. Creates a task and runs on a separate thread.
+     * Converts the business objects to model objects and updated the observable list.
+     */
     private void retrieveTransactions() {
         Task<List<Transaction>> retrieveTransactions = new Task<List<Transaction>>() {
             @Override
@@ -57,8 +59,18 @@ public class SavingsGoalManager {
                 this.transactionsList.addAll(modelList);
             }
         });
+        
+        retrieveTransactions.setOnFailed(e -> {
+            Alert alert = createErrorAlert("Failure retrieving transactions " + retrieveTransactions.getException().getMessage());
+            alert.show();
+        });
     }
     
+    /**
+     * Method to handle requests to save a new transaction. Runs on a separate thread.
+     *
+     * @param transaction The transaction to save.
+     */
     public void addTransaction(Transaction transaction) {
         Task<Transaction> newTransaction = new Task<Transaction>() {
             @Override
@@ -73,9 +85,18 @@ public class SavingsGoalManager {
             this.transactionsList.add(model);
         });
         
+        newTransaction.setOnFailed(e -> {
+            Alert alert = createErrorAlert("Save transaction failed: " + newTransaction.getException().getMessage());
+            alert.show();
+        });
+        
         this.retrieveSavingsGoalsAsync();
     }
     
+    /**
+     * Method to call service to retrieve the list of deposits. Converts the business objects to model objects
+     * and updates the observable list. Runs on a new thread.
+     */
     private void retrieveDeposits() {
         Task<List<Deposit>> retrieveDeposits = new Task<List<Deposit>>() {
             @Override
@@ -96,8 +117,17 @@ public class SavingsGoalManager {
                 this.depositsList.setAll(modelData);
             }
         });
+        
+        retrieveDeposits.setOnFailed(e -> {
+            Alert alert = createErrorAlert("Retrieve deposits failed: " + retrieveDeposits.getException().getMessage());
+            alert.show();
+        });
     }
     
+    /**
+     * Support for passing a new deposit object to the backend for saving. Runs on a new thread.
+     * @param deposit
+     */
     public void addDeposit(Deposit deposit) {
         
         Task<Deposit> addDeposit = new Task<Deposit>() {
@@ -112,12 +142,15 @@ public class SavingsGoalManager {
             Deposit savedDeposit = addDeposit.getValue();
             this.depositsList.add(new DepositModel(savedDeposit));
         });
+        
+        addDeposit.setOnFailed(e -> {
+            Alert alert = createErrorAlert("Add deposit failed: " + addDeposit.getException().getMessage());
+            alert.show();
+        });
     }
     
     /**
      * Uses a thread to call the service to retrieve the list of savings goals.
-     *
-     * @TODO implement failure handling
      */
     private void retrieveSavingsGoalsAsync() {
         
@@ -139,8 +172,16 @@ public class SavingsGoalManager {
                 savingsGoalsList.setAll(modelGoals);
             }
         });
+        
+        retrieveGoals.setOnFailed(e -> {
+            Alert alert = createErrorAlert("Retrieve savings goals failed: " + retrieveGoals.getException().getMessage());
+            alert.show();
+        });
     }
     
+    /**
+     * Synchronous method for retrieve a list of savings goals.
+     */
     private void retrieveSavingsGoalsBlocking() {
         List<SavingsGoal> savingsGoals = savingsGoalsService.retrieveSavingsGoals();
         if (savingsGoals != null) {
@@ -173,8 +214,18 @@ public class SavingsGoalManager {
             this.selectedSavingsGoalIndex = null;
             updateSavingsGoalModel(savedGoal);
         });
+        
+        task.setOnFailed(e -> {
+            Alert alert = createErrorAlert("Update savings goal failed: " + task.getException().getMessage());
+            alert.show();
+        });
     }
     
+    /**
+     * Async method to add a new savings goal
+     *
+     * @param savingsGoal The savings goal data to save
+     */
     private void addNewSavingsGoal(SavingsGoal savingsGoal) {
         Task<SavingsGoal> task = new Task<>() {
             @Override
@@ -188,17 +239,28 @@ public class SavingsGoalManager {
             SavingsGoal savedGoal = task.getValue();
             updateSavingsGoalModel(savedGoal);
         });
+        
         task.setOnFailed(e -> {
-            System.out.println("Failed");
+            Alert alert = createErrorAlert("Add new savings goal failed: " + task.getException().getMessage());
+            alert.show();
         });
     }
     
+    /**
+     * Helper method to add a business SavingsGoal object to the model backing the view.
+     *
+     * @param savingsGoal The object to convert and save
+     */
     private void updateSavingsGoalModel(SavingsGoal savingsGoal) {
         SavingsGoalModel model = new SavingsGoalModel(savingsGoal);
         this.savingsGoalsList.add(model);
         Collections.sort(this.savingsGoalsList);
     }
     
+    /**
+     * Entry point for saving a SavingsGoal. This method will determine if the goal should be updated or saved as new.
+     * @param savingsGoal
+     */
     public void saveSavingsGoal(SavingsGoal savingsGoal) {
         if (savingsGoal.getSavingsGoalId() == null) {
             addNewSavingsGoal(savingsGoal);
@@ -208,6 +270,11 @@ public class SavingsGoalManager {
         }
     }
     
+    /**
+     * Async method for deleting a savings goal.
+     *
+     * @param savingsGoal The goal with unique identifier to delete
+     */
     public void deleteSavingsGoal(SavingsGoal savingsGoal) {
         Task task = new Task() {
             @Override
@@ -225,16 +292,28 @@ public class SavingsGoalManager {
         });
         
         task.setOnFailed(e -> {
-            System.out.println(e);
+            Alert alert = createErrorAlert("Delete savings goal failed: " + task.getException().getMessage());
         });
     }
     
+    /**
+     * Synchronous call to retrieve the designated default goal.
+     *
+     * @return The default goal model object
+     */
     public SavingsGoalModel getDefaultGoal() {
         
         SavingsGoal goal = this.savingsGoalsService.getDefaultGoal();
         return new SavingsGoalModel(goal);
     }
     
+    /**
+     * Method converts the model objects in the list to allocation objects in a new list and then calls for them to be updated.
+     *
+     * After persistence the goals and deposit lists are refreshed.
+     *
+     * @param savingsGoalModels List of goals with their updated allocations amounts.
+     */
     public void allocateDepositToGoals(List<SavingsGoalModel> savingsGoalModels) {
         
         List<SavingsGoalDepositAllocation> savingsGoalAllocations = new ArrayList<>(savingsGoalModels.size());
@@ -250,6 +329,19 @@ public class SavingsGoalManager {
         this.savingsGoalsService.allocateDepositToGoals(savingsGoalAllocations);
         this.retrieveSavingsGoalsAsync();
         this.retrieveDeposits();
+    }
+    
+    /**
+     * Helper method to build an error  alert instance.
+     *
+     * @param message Message to display on the alert body
+     * @return A new Alert instance
+     */
+    private Alert createErrorAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setContentText(message);
+        return alert;
     }
     
     public Integer getSelectedSavingsGoalIndex() {
