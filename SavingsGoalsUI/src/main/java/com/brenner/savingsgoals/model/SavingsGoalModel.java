@@ -8,6 +8,9 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Date;
 
+/**
+ * UI object for a SavingsGoal. Includes a corresponding reference to the SavingsGoal dto.
+ */
 public class SavingsGoalModel implements Comparable<SavingsGoalModel> {
     
     private final SimpleStringProperty goalNameProp;

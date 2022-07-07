@@ -6,6 +6,9 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Date;
 
+/**
+ * UI object for a Transaction. Includes a corresponding reference to the Transaction dto.
+ */
 public class TransactionModel {
     
     Transaction transaction;

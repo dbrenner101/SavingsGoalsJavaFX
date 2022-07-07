@@ -7,6 +7,9 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Date;
 
+/**
+ *  UI object for Deposit. Includes a corresponding reference to the Daposit dto.
+ */
 public class DepositModel {
     
     Deposit deposit;
