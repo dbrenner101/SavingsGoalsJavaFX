@@ -29,6 +29,8 @@ import java.util.ResourceBundle;
  * it's expected weekly target amount. The default goal is incremented/decremented by the balance. The allocation column
  * is editable allowing for the default allocation amount to be changed. The default goal amount will update dynamically
  * as the allocation amounts are changed. Nothing is persisted until the save button is clicked.
+ *
+ * Relies on the allocationDepositView.fxml
  */
 public class DepositAllocationController extends BaseController implements Initializable {
     

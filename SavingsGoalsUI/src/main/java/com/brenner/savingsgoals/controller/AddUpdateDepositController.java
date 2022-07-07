@@ -20,6 +20,8 @@ import java.util.ResourceBundle;
 /**
  * Controller to manage the add/update deposit scene. Includes a validator implementation that enforces required data
  * and data type.
+ *
+ * Relies on the addDeposit.fxml
  */
 public class AddUpdateDepositController extends BaseController implements Initializable {
     

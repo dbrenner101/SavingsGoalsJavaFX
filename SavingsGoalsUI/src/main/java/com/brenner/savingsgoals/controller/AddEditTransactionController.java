@@ -20,6 +20,8 @@ import java.util.ResourceBundle;
 /**
  * Controller to handle the add (edit) transaction.
  *
+ * Relies on the addEditTransaction.fxml
+ *
  * @TODO add validator
  */
 public class AddEditTransactionController extends BaseController implements Initializable {

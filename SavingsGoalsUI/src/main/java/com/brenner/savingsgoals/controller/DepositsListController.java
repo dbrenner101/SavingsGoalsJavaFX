@@ -23,6 +23,8 @@ import java.util.ResourceBundle;
  * Controller to handle management and interactions with the list of deposits. A context menu on each row in the table
  * allows access to the allocation view.
  *
+ * Relies on teh despositsList.fxml
+ *
  * @TODO Add delete/edit deposit capability
  */
 public class DepositsListController extends BaseController implements Initializable {

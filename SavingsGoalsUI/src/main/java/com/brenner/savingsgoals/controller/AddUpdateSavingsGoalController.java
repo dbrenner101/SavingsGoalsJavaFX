@@ -24,6 +24,8 @@ import java.util.ResourceBundle;
 /**
  * Controller to handle the add/update scene and behavior. Includes a validator implementation that enforces required data
  * and data type.
+ *
+ * Relies on the addSavingsGoal.fxml
  */
 public class AddUpdateSavingsGoalController extends BaseController implements Initializable {
     

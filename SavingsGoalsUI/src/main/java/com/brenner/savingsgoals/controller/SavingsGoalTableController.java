@@ -25,6 +25,8 @@ import java.util.ResourceBundle;
  * any active row.
  *
  * The table is backed by an Observable list managed by the SavingsGoalManager
+ *
+ * Relies on the savingsGoalsTableView.fxml
  */
 public class SavingsGoalTableController extends BaseController implements Initializable {
     

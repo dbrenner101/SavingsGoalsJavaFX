@@ -14,6 +14,8 @@ import java.util.ResourceBundle;
 /**
  * Controller than handles interactions with the parent window/stage. This includes the menu options which are
  * the primary navigation tools in the UI. Delegation of view initialization and display are left to the ViewFactory
+ *
+ * Relies on teh mainWindow.fxml
  */
 public class MainWindowController extends BaseController implements Initializable {
     
