@@ -24,9 +24,7 @@ import java.util.ResourceBundle;
  * Controller to handle management and interactions with the list of deposits. A context menu on each row in the table
  * allows access to the allocation view.
  *
- * Relies on teh despositsList.fxml
- *
- * @TODO Add delete/edit deposit capability
+ * Relies on the despositsList.fxml
  */
 public class DepositsListController extends BaseController implements Initializable {
     
@@ -79,6 +77,12 @@ public class DepositsListController extends BaseController implements Initializa
                         }
                     });
                 });
+                
+                final MenuItem editDepositItem = new MenuItem("Edit");
+                editDepositItem.setOnAction(e -> {
+                    savingsGoalManager.setSelectedDepositModel(depositsView.getSelectionModel().getSelectedItem());
+                    viewFactory.showAddUpdateDeposits();
+                });
             
                 row.setOnMouseClicked(e -> {
                     if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2) {
@@ -90,7 +94,7 @@ public class DepositsListController extends BaseController implements Initializa
                     }
                 });
             
-                tableRowMenu.getItems().addAll(allocateDepositMenuItem, deleteDepositItem);
+                tableRowMenu.getItems().addAll(allocateDepositMenuItem, deleteDepositItem, editDepositItem);
             
                 row.contextMenuProperty().bind(
                         Bindings.when(Bindings.isNotNull(row.itemProperty()))

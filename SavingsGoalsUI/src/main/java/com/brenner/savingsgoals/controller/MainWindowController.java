@@ -72,6 +72,7 @@ public class MainWindowController extends BaseController implements Initializabl
     
     @FXML
     void addNewDepositsMenuItemAction(ActionEvent event) {
+        this.savingsGoalManager.setSelectedDepositModel(null);
         super.viewFactory.showAddUpdateDeposits();
     }
     
