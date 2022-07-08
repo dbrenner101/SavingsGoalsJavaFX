@@ -1,14 +1,16 @@
 package com.brenner.savingsgoals.service.model;
 
+import java.math.BigDecimal;
+
 /**
  * Service object for a SavingsGoalDepositAllocation that acts in a DTO capacity.
  */
 public class SavingsGoalDepositAllocation {
     Integer savingsGoalId;
     Long depositId;
-    Float allocationAmount;
+    BigDecimal allocationAmount;
     
-    public SavingsGoalDepositAllocation(Integer savingsGoalId, Long depositId, Float allocationAmount) {
+    public SavingsGoalDepositAllocation(Integer savingsGoalId, Long depositId, BigDecimal allocationAmount) {
         this.savingsGoalId = savingsGoalId;
         this.depositId = depositId;
         this.allocationAmount = allocationAmount;
@@ -30,11 +32,11 @@ public class SavingsGoalDepositAllocation {
         this.depositId = depositId;
     }
     
-    public Float getAllocationAmount() {
+    public BigDecimal getAllocationAmount() {
         return allocationAmount;
     }
     
-    public void setAllocationAmount(Float allocationAmount) {
+    public void setAllocationAmount(BigDecimal allocationAmount) {
         this.allocationAmount = allocationAmount;
     }
 }

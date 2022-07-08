@@ -1,5 +1,6 @@
 package com.brenner.savingsgoals.service.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -9,7 +10,7 @@ public class Deposit {
     
     private Long depositId;
     
-    private Float amount;
+    private BigDecimal amount;
     
     private Date date;
     
@@ -17,13 +18,13 @@ public class Deposit {
     
     public Deposit() {}
     
-    public Deposit(Long depositId, Float amount, Date date) {
+    public Deposit(Long depositId, BigDecimal amount, Date date) {
         this.depositId = depositId;
         this.amount = amount;
         this.date = date;
     }
     
-    public Deposit(Float amount, Date date) {
+    public Deposit(BigDecimal amount, Date date) {
         this.amount = amount;
         this.date = date;
     }
@@ -36,11 +37,11 @@ public class Deposit {
         this.depositId = depositId;
     }
     
-    public Float getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
     
-    public void setAmount(Float amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
     

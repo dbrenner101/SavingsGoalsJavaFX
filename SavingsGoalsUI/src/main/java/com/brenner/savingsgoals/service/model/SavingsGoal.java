@@ -1,5 +1,6 @@
 package com.brenner.savingsgoals.service.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -15,7 +16,7 @@ public class SavingsGoal {
     
     private Date savingsEndDate;
     
-    private Float targetAmount;
+    private BigDecimal targetAmount;
     
     private Integer monthsTillPayment;
     
@@ -23,15 +24,15 @@ public class SavingsGoal {
     
     private Integer daysTillPayment;
     
-    private Float savingsPerMonth;
+    private BigDecimal savingsPerMonth;
     
-    private Float savingsPerWeek;
+    private BigDecimal savingsPerWeek;
     
-    private Float savingsPerDay;
+    private BigDecimal savingsPerDay;
     
-    private Float initialBalance;
+    private BigDecimal initialBalance;
     
-    private Float currentBalance;
+    private BigDecimal currentBalance;
     
     private boolean isDefault;
     
@@ -40,7 +41,7 @@ public class SavingsGoal {
     public SavingsGoal() {}
     
     public SavingsGoal(Integer savingsGoalId, String goalName, Date savingsStartDate, Date savingsEndDate,
-                       Float targetAmount, Float initialBalance, Float currentBalance, boolean isDefault) {
+                       BigDecimal targetAmount, BigDecimal initialBalance, BigDecimal currentBalance, boolean isDefault) {
         this.savingsGoalId = savingsGoalId;
         this.goalName = goalName;
         this.savingsStartDate = savingsStartDate;
@@ -83,11 +84,11 @@ public class SavingsGoal {
         this.savingsEndDate = savingsEndDate;
     }
     
-    public Float getTargetAmount() {
+    public BigDecimal getTargetAmount() {
         return targetAmount;
     }
     
-    public void setTargetAmount(Float targetAmount) {
+    public void setTargetAmount(BigDecimal targetAmount) {
         this.targetAmount = targetAmount;
     }
     
@@ -115,35 +116,35 @@ public class SavingsGoal {
         this.daysTillPayment = daysTillPayment;
     }
     
-    public Float getSavingsPerMonth() {
+    public BigDecimal getSavingsPerMonth() {
         return savingsPerMonth;
     }
     
-    public void setSavingsPerMonth(Float savingsPerMonth) {
+    public void setSavingsPerMonth(BigDecimal savingsPerMonth) {
         this.savingsPerMonth = savingsPerMonth;
     }
     
-    public Float getSavingsPerWeek() {
+    public BigDecimal getSavingsPerWeek() {
         return savingsPerWeek;
     }
     
-    public void setSavingsPerWeek(Float savingsPerWeek) {
+    public void setSavingsPerWeek(BigDecimal savingsPerWeek) {
         this.savingsPerWeek = savingsPerWeek;
     }
     
-    public Float getSavingsPerDay() {
+    public BigDecimal getSavingsPerDay() {
         return savingsPerDay;
     }
     
-    public void setSavingsPerDay(Float savingsPerDay) {
+    public void setSavingsPerDay(BigDecimal savingsPerDay) {
         this.savingsPerDay = savingsPerDay;
     }
     
-    public Float getCurrentBalance() {
+    public BigDecimal getCurrentBalance() {
         return currentBalance;
     }
     
-    public void setCurrentBalance(Float currentBalance) {
+    public void setCurrentBalance(BigDecimal currentBalance) {
         this.currentBalance = currentBalance;
     }
     
@@ -163,11 +164,11 @@ public class SavingsGoal {
         this.notes = notes;
     }
     
-    public Float getInitialBalance() {
+    public BigDecimal getInitialBalance() {
         return initialBalance;
     }
     
-    public void setInitialBalance(Float initialBalance) {
+    public void setInitialBalance(BigDecimal initialBalance) {
         this.initialBalance = initialBalance;
     }
     

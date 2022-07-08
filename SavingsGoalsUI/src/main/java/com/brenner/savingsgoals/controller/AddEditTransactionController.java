@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.util.StringConverter;
 import net.synedra.validatorfx.Validator;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.Date;
@@ -57,7 +58,7 @@ public class AddEditTransactionController extends BaseController implements Init
             Date transactionDate = CommonUtils.parseStdFormatDateString(this.datePicker.getEditor().getText());
             SavingsGoal fromGoal = fromGoalSelection.getSelectionModel().getSelectedItem().getSavingsGoal();
             SavingsGoal toGoal = toGoalSelection.getSelectionModel().getSelectedItem().getSavingsGoal();
-            Float amount = Float.valueOf(amountTextField.getText());
+            BigDecimal amount = new BigDecimal(amountTextField.getText());
             String notes = notesTextArea.getText();
             
             Transaction t = new Transaction(null, transactionDate, fromGoal, toGoal, amount, notes);

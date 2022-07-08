@@ -1,8 +1,8 @@
 package com.brenner.savingsgoals.controller;
 
 import com.brenner.savingsgoals.SavingsGoalManager;
-import com.brenner.savingsgoals.service.model.SavingsGoal;
 import com.brenner.savingsgoals.model.SavingsGoalModel;
+import com.brenner.savingsgoals.service.model.SavingsGoal;
 import com.brenner.savingsgoals.util.CommonUtils;
 import com.brenner.savingsgoals.view.ViewFactory;
 import javafx.event.ActionEvent;
@@ -13,9 +13,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.Stage;
 import net.synedra.validatorfx.Validator;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.Date;
@@ -138,10 +138,12 @@ public class AddUpdateSavingsGoalController extends BaseController implements In
         validator.createCheck().dependsOn("initialAmount", initialAmountTextField.textProperty())
                 .withMethod(c -> {
                     String initialAmountStr = c.get("initialAmount");
-                    try {
-                        Float.parseFloat(initialAmountStr);
-                    } catch (NumberFormatException nfe) {
-                        c.error("Initial amount must be a number.");
+                    if (initialAmountStr.trim().length() > 0) {
+                        try {
+                            Float.parseFloat(initialAmountStr);
+                        } catch (NumberFormatException nfe) {
+                            c.error("Initial amount must be a number.");
+                        }
                     }
                 })
                 .decorates(initialAmountTextField);
@@ -149,10 +151,12 @@ public class AddUpdateSavingsGoalController extends BaseController implements In
         validator.createCheck().dependsOn("currentAmount", currentBalanceTextField.textProperty())
                 .withMethod(c -> {
                     String currentAmountStr = c.get("currentAmount");
-                    try {
-                        Float.parseFloat(currentAmountStr);
-                    } catch (NumberFormatException nfe) {
-                        c.error("Current amount must be a number.");
+                    if (currentAmountStr.trim().length() > 0) {
+                        try {
+                            Float.parseFloat(currentAmountStr);
+                        } catch (NumberFormatException nfe) {
+                            c.error("Current amount must be a number.");
+                        }
                     }
                 })
                 .decorates(currentBalanceTextField);
@@ -177,7 +181,7 @@ public class AddUpdateSavingsGoalController extends BaseController implements In
         if (! validator.containsErrors()) {
             SavingsGoal savingsGoal = buildDataObject();
             savingsGoalManager.saveSavingsGoal(savingsGoal);
-            viewFactory.closeStage((Stage) this.endDateErrorLabel.getScene().getWindow());
+            viewFactory.showSavingsGoalList();
         }
     }
     
@@ -197,14 +201,14 @@ public class AddUpdateSavingsGoalController extends BaseController implements In
             //check for in validation step
         }
         savingsGoal.setGoalName(this.goalNameTextField.getText());
-        savingsGoal.setTargetAmount(Float.valueOf(this.targetAmountTextField.getText()));
+        savingsGoal.setTargetAmount(new BigDecimal(this.targetAmountTextField.getText()));
         savingsGoal.setNotes(this.notesTextArea.getText());
     
         if (this.currentBalanceTextField.getText() != null && this.currentBalanceTextField.getText().trim().length() > 0) {
-            savingsGoal.setCurrentBalance(Float.valueOf(this.currentBalanceTextField.getText()));
+            savingsGoal.setCurrentBalance(new BigDecimal(this.currentBalanceTextField.getText()));
         }
         if (this.initialAmountTextField.getText() != null && this.initialAmountTextField.getText().trim().length() > 0) {
-            savingsGoal.setInitialBalance(Float.valueOf(this.initialAmountTextField.getText()));
+            savingsGoal.setInitialBalance(new BigDecimal(this.initialAmountTextField.getText()));
         }
         
         return savingsGoal;

@@ -16,6 +16,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -117,24 +118,28 @@ public class DepositAllocationController extends BaseController implements Initi
     }
     
     private void updateDefaultGoalAmount(String oldAmountStr, String newAmountStr) throws ParseException {
-        float oldAmount = Float.parseFloat(oldAmountStr);
-        float newAmount = Float.parseFloat(newAmountStr);
-        float diff = oldAmount - newAmount;
-        String currentAmountString = this.defaultGoalAmount.getText();
-        float currentDefaultAmount = NumberFormat.getCurrencyInstance(Locale.US).parse(currentAmountString).floatValue() + diff;
-        this.defaultGoalAmount.setText(CommonUtils.formatAsCurrency(currentDefaultAmount));
+        BigDecimal oldAmount = new BigDecimal(oldAmountStr);
+        BigDecimal newAmount = new BigDecimal(newAmountStr);
+        BigDecimal diff = oldAmount.subtract(newAmount);
+        String currentAmountStringCurrency = this.defaultGoalAmount.getText();
+        Number currentAmountNumber = NumberFormat.getCurrencyInstance(Locale.US).parse(currentAmountStringCurrency).floatValue();
+        BigDecimal currentDefaultAmount = BigDecimal.valueOf(currentAmountNumber.floatValue()).add(diff);
+        this.defaultGoalAmount.setText(CommonUtils.formatAsCurrency(currentDefaultAmount.floatValue()));
     }
     
     private void populateSavingsGoalTableView() {
         this.savingsGoalsTable.setItems(null);
         List<SavingsGoalModel> savingsGoals = this.savingsGoalManager.getSavingsGoalsList(false);
         DepositModel depositModel = this.savingsGoalManager.getSelectedDepositModel();
-        Float depositAmount = depositModel.getDeposit().getAmount();
-        Float remainingDeposit = depositAmount;
+        BigDecimal depositAmount = depositModel.getDeposit().getAmount();
+        BigDecimal remainingDeposit = depositAmount;
         for (SavingsGoalModel savingsGoal : savingsGoals) {
-            Float goalWeeklyAmount = savingsGoal.getSavingsGoal().getSavingsPerWeek();
+            BigDecimal goalWeeklyAmount = savingsGoal.getSavingsGoal().getSavingsPerWeek();
+            if (goalWeeklyAmount == null) {
+                goalWeeklyAmount = BigDecimal.valueOf(0);
+            }
             savingsGoal.setAllocatedAmount(goalWeeklyAmount.toString());
-            remainingDeposit = remainingDeposit - goalWeeklyAmount;
+            remainingDeposit = remainingDeposit.subtract(goalWeeklyAmount);
         }
         this.savingsGoalsTable.setItems(this.savingsGoalManager.getSavingsGoalsList(true));
         
@@ -147,6 +152,6 @@ public class DepositAllocationController extends BaseController implements Initi
         populateSavingsGoalTableView();
         SavingsGoalModel defaultGoal = this.savingsGoalManager.getDefaultGoal();
         this.defaultGoalName.setText(defaultGoal.getSavingsGoal().getGoalName());
-        this.defaultGoalAmount.setText(CommonUtils.formatAsCurrency(defaultGoal.getSavingsGoal().getCurrentBalance()));
+        this.defaultGoalAmount.setText(CommonUtils.formatAsCurrency(defaultGoal.getSavingsGoal().getCurrentBalance().floatValue()));
     }
 }

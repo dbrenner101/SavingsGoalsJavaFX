@@ -42,13 +42,13 @@ public class SavingsGoalModel implements Comparable<SavingsGoalModel> {
         this.goalNameProp = new SimpleStringProperty(savingsGoal.getGoalName());
         this.savingsStartDateProp = new SimpleObjectProperty<>(savingsGoal.getSavingsStartDate());
         this.savingsEndDateProp = new SimpleObjectProperty<>(savingsGoal.getSavingsEndDate());
-        this.targetAmountProp = new SimpleStringProperty(CommonUtils.formatAsCurrency(savingsGoal.getTargetAmount()));
+        this.targetAmountProp = new SimpleStringProperty(CommonUtils.formatAsCurrency(savingsGoal.getTargetAmount().floatValue()));
         this.monthsTillPaymentProp = (savingsGoal.getMonthsTillPayment() != null) ? new SimpleIntegerProperty(savingsGoal.getMonthsTillPayment()) : null;
         this.weeksTillPaymentProp = (savingsGoal.getWeeksTillPayment() != null) ? new SimpleIntegerProperty(savingsGoal.getWeeksTillPayment()) : null;
         this.daysTillPaymentProp = (savingsGoal.getDaysTillPayment() != null) ? new SimpleIntegerProperty(savingsGoal.getDaysTillPayment()) : null;
-        this.savingsPerWeekProp = (savingsGoal.getSavingsPerWeek() != null) ? new SimpleStringProperty(CommonUtils.formatAsCurrency(savingsGoal.getSavingsPerWeek())) : null;
-        this.initialBalanceProp = (savingsGoal.getInitialBalance() != null) ? new SimpleStringProperty(CommonUtils.formatAsCurrency(savingsGoal.getInitialBalance())) : null;
-        this.currentBalanceProp = (savingsGoal.getCurrentBalance() != null) ? new SimpleStringProperty(CommonUtils.formatAsCurrency(savingsGoal.getCurrentBalance())) : null;
+        this.savingsPerWeekProp = (savingsGoal.getSavingsPerWeek() != null) ? new SimpleStringProperty(CommonUtils.formatAsCurrency(savingsGoal.getSavingsPerWeek().floatValue())) : null;
+        this.initialBalanceProp = (savingsGoal.getInitialBalance() != null) ? new SimpleStringProperty(CommonUtils.formatAsCurrency(savingsGoal.getInitialBalance().floatValue())) : null;
+        this.currentBalanceProp = (savingsGoal.getCurrentBalance() != null) ? new SimpleStringProperty(CommonUtils.formatAsCurrency(savingsGoal.getCurrentBalance().floatValue())) : null;
     }
     
     public Integer getSavingsGoalId() {

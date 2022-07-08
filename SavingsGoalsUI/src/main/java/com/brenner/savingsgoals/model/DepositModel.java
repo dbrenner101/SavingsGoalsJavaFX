@@ -21,7 +21,7 @@ public class DepositModel {
     public DepositModel(Deposit deposit) {
         this.deposit = deposit;
         this.depositDateProp = new SimpleObjectProperty<>(deposit.getDate());
-        this.depositAmountProp = new SimpleStringProperty(CommonUtils.formatAsCurrency(deposit.getAmount()));
+        this.depositAmountProp = new SimpleStringProperty(CommonUtils.formatAsCurrency(deposit.getAmount().floatValue()));
     }
     
     public Deposit getDeposit() {

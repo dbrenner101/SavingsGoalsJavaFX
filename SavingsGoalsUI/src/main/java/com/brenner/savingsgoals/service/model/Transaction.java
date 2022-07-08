@@ -1,5 +1,6 @@
 package com.brenner.savingsgoals.service.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -14,13 +15,13 @@ public class Transaction {
     
     private SavingsGoal toGoal;
     
-    private Float amount;
+    private BigDecimal amount;
     
     private String notes;
     
     public Transaction() {}
     
-    public Transaction(Long transactionId, Date date, SavingsGoal fromGoal, SavingsGoal toGoal, Float amount, String notes) {
+    public Transaction(Long transactionId, Date date, SavingsGoal fromGoal, SavingsGoal toGoal, BigDecimal amount, String notes) {
         this.transactionId = transactionId;
         this.date = date;
         this.fromGoal = fromGoal;
@@ -61,11 +62,11 @@ public class Transaction {
         this.toGoal = toGoal;
     }
     
-    public Float getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
     
-    public void setAmount(Float amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
     

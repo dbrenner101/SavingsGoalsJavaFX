@@ -15,6 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -408,7 +409,7 @@ public class SavingsGoalManager {
             SavingsGoalDepositAllocation allocation = new SavingsGoalDepositAllocation(
                     model.getSavingsGoalId(),
                     this.selectedDepositModel.getDeposit().getDepositId(),
-                    Float.valueOf(model.getAllocatedAmount()));
+                    new BigDecimal(model.getAllocatedAmount()));
             savingsGoalAllocations.add(allocation);
         }
         

@@ -13,6 +13,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import net.synedra.validatorfx.Validator;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.Date;
@@ -54,7 +55,7 @@ public class AddUpdateDepositController extends BaseController implements Initia
                 // eat it
             }
     
-            Float depositAmount = Float.valueOf(depositAmountField.getText());
+            BigDecimal depositAmount = new BigDecimal(depositAmountField.getText());
     
             Deposit deposit = new Deposit(depositAmount, depositDate);
             DepositModel selectedDepositModel = this.savingsGoalManager.getSelectedDepositModel();
