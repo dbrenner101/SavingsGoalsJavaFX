@@ -42,6 +42,14 @@ public class DepositsListController extends BaseController implements Initializa
         super(savingsGoalManager, viewFactory, fxmlName);
     }
     
+    public DepositsListController(SavingsGoalManager savingsGoalManager, ViewFactory viewFactory, String fxmlName,
+            TableColumn depositAmountCol, TableColumn depositDateCol, TableView depositsView) {
+        super(savingsGoalManager, viewFactory, fxmlName);
+        this.depositAmountCol = depositAmountCol;
+        this.depositDateCol = depositDateCol;
+        this.depositsView = depositsView;
+    }
+    
     private void setUpDepositTableView() {
         depositAmountCol.setCellValueFactory(new PropertyValueFactory<DepositModel, Float>("depositAmountProp"));
         depositDateCol.setCellValueFactory(new PropertyValueFactory<DepositModel, Date>("depositDateProp"));
