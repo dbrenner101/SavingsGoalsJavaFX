@@ -54,6 +54,7 @@ public class DepositsListController extends BaseController implements Initializa
             @Override
             public TableRow<DepositModel> call(TableView<DepositModel> param) {
                 final TableRow<DepositModel> row = new TableRow<>();
+                
                 final ContextMenu tableRowMenu = new ContextMenu();
                 final MenuItem allocateDepositMenuItem = new MenuItem("Allocate Deposit");
                 allocateDepositMenuItem.setOnAction(new EventHandler<ActionEvent>() {
@@ -70,7 +71,6 @@ public class DepositsListController extends BaseController implements Initializa
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.initModality(Modality.APPLICATION_MODAL);
                     alert.showAndWait().ifPresent(type -> {
-                        System.out.println(type.getButtonData().getTypeCode());
                         if (type.getButtonData().equals(ButtonBar.ButtonData.OK_DONE)) {
                                 DepositModel selectedModel = depositsView.getSelectionModel().getSelectedItem();
                                 savingsGoalManager.deleteDeposit(selectedModel.getDeposit());

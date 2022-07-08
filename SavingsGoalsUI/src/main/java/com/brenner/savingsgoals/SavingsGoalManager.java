@@ -56,7 +56,7 @@ public class SavingsGoalManager {
                     TransactionModel model = new TransactionModel(transaction);
                     modelList.add(model);
                 }
-                this.transactionsList.addAll(modelList);
+                this.transactionsList.setAll(modelList);
             }
         });
         
@@ -359,6 +359,26 @@ public class SavingsGoalManager {
         
         task.setOnFailed(e -> {
             Alert alert = createErrorAlert("Delete savings goal failed: " + task.getException().getMessage());
+        });
+    }
+    
+    public void deleteTransaction(Transaction transaction) {
+        Task<Transaction> task = new Task<Transaction>() {
+            @Override
+            protected Transaction call() throws Exception {
+                transactionsService.deleteTransaction(transaction.getTransactionId());
+                return null;
+            }
+        };
+        task.run();
+        
+        task.setOnSucceeded(e -> {
+            retrieveTransactions();
+        });
+        
+        task.setOnFailed(e -> {
+            Alert alert = createErrorAlert("Delete transaction failed: " + task.getException().getMessage());
+            alert.show();
         });
     }
     
