@@ -34,6 +34,7 @@ public class ViewFactory {
         MainWindowController mainWindowController = new MainWindowController(this.savingsGoalManager, this, "mainWindow.fxml");
         initializeStage(mainWindowController);
         this.targetPane = mainWindowController.getRootPane();
+        showSavingsGoalList();
     }
     
     /**
