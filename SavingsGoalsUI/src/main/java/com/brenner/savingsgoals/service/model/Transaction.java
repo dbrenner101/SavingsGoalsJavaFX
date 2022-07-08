@@ -19,6 +19,8 @@ public class Transaction {
     
     private String notes;
     
+    private boolean applied;
+    
     public Transaction() {}
     
     public Transaction(Long transactionId, Date date, SavingsGoal fromGoal, SavingsGoal toGoal, BigDecimal amount, String notes) {
@@ -76,5 +78,27 @@ public class Transaction {
     
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+    
+    public boolean isApplied() {
+        return applied;
+    }
+    
+    public void setApplied(boolean applied) {
+        this.applied = applied;
+    }
+    
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Transaction{");
+        sb.append("transactionId=").append(transactionId);
+        sb.append(", date=").append(date);
+        sb.append(", fromGoal=").append(fromGoal);
+        sb.append(", toGoal=").append(toGoal);
+        sb.append(", amount=").append(amount);
+        sb.append(", notes='").append(notes).append('\'');
+        sb.append(", applied=").append(applied);
+        sb.append('}');
+        return sb.toString();
     }
 }

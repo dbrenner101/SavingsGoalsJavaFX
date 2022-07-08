@@ -1,6 +1,7 @@
 package com.brenner.savingsgoals.model;
 
 import com.brenner.savingsgoals.service.model.Transaction;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -23,6 +24,8 @@ public class TransactionModel {
     
     private final SimpleStringProperty notesProp;
     
+    private final SimpleBooleanProperty appliedProp;
+    
     public TransactionModel(Transaction transaction) {
         this.transaction = transaction;
         this.transactionDateProp = new SimpleObjectProperty<>(transaction.getDate());
@@ -30,6 +33,7 @@ public class TransactionModel {
         this.toGoalProp = new SimpleStringProperty(transaction.getToGoal().getGoalName());
         this.amountProp = new SimpleStringProperty(transaction.getAmount().toString());
         this.notesProp = new SimpleStringProperty(transaction.getNotes());
+        this.appliedProp = new SimpleBooleanProperty(transaction.isApplied());
     }
     
     public Transaction getTransaction() {
@@ -74,5 +78,13 @@ public class TransactionModel {
     
     public SimpleStringProperty notesPropProperty() {
         return notesProp;
+    }
+    
+    public boolean isAppliedProp() {
+        return appliedProp.get();
+    }
+    
+    public SimpleBooleanProperty appliedPropProperty() {
+        return appliedProp;
     }
 }

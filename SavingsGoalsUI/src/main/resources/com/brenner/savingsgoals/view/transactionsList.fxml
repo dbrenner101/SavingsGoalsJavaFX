@@ -6,18 +6,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="495.0" prefWidth="755.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="495.0" prefWidth="839.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TableView fx:id="transactionsTable" layoutY="68.0" prefHeight="427.0" prefWidth="755.0">
+      <TableView fx:id="transactionsTable" editable="true" layoutY="68.0" prefHeight="427.0" prefWidth="837.0">
         <columns>
-          <TableColumn fx:id="dateCol" prefWidth="75.0" text="Date" />
-          <TableColumn fx:id="fromGoalCol" prefWidth="187.0" text="From Goal" />
-            <TableColumn fx:id="toGoalCol" prefWidth="171.0" text="To Goal" />
-            <TableColumn fx:id="amountCol" prefWidth="70.0" text="Amount" />
-            <TableColumn fx:id="notesCol" prefWidth="251.0" text="Notes" />
+          <TableColumn fx:id="dateCol" editable="false" prefWidth="75.0" text="Date" />
+          <TableColumn fx:id="fromGoalCol" editable="false" prefWidth="187.0" text="From Goal" />
+            <TableColumn fx:id="toGoalCol" editable="false" prefWidth="171.0" text="To Goal" />
+            <TableColumn fx:id="amountCol" editable="false" prefWidth="70.0" text="Amount" />
+            <TableColumn fx:id="notesCol" editable="false" prefWidth="251.0" text="Notes" />
+            <TableColumn fx:id="appliedCol" prefWidth="75.0" text="Applied" />
         </columns>
       </TableView>
-      <Label layoutX="313.0" layoutY="14.0" text="Transactions List">
+      <Label layoutX="354.0" layoutY="14.0" text="Transactions List">
          <font>
             <Font size="18.0" />
          </font>

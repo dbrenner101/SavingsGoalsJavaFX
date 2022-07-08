@@ -191,6 +191,25 @@ public class SavingsGoalManager {
         });
     }
     
+    public void updateTransactionAppliedValue(Transaction transaction) {
+        Task<Transaction> task = new Task<Transaction>() {
+            @Override
+            protected Transaction call() throws Exception {
+                transactionsService.updateTransaction(transaction);
+                return null;
+            }
+        };
+        task.run();
+        
+        task.setOnSucceeded(e -> {
+            retrieveTransactions();
+        });
+        task.setOnFailed(e -> {
+            Alert alert = createErrorAlert("Update transaction failed: " + task.getException().getMessage());
+            alert.show();
+        });
+    }
+    
     /**
      * Support for passing a new deposit object to the backend for saving. Runs on a new thread.
      * @param deposit
