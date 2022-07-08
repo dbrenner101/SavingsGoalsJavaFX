@@ -69,6 +69,7 @@ public class DepositsListController extends BaseController implements Initializa
                 final MenuItem deleteDepositItem = new MenuItem("Delete");
                 deleteDepositItem.setOnAction(e -> {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setContentText("Confirm delete deposit");
                     alert.initModality(Modality.APPLICATION_MODAL);
                     alert.showAndWait().ifPresent(type -> {
                         if (type.getButtonData().equals(ButtonBar.ButtonData.OK_DONE)) {
