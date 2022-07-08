@@ -31,40 +31,34 @@ import java.util.ResourceBundle;
  */
 public class SavingsGoalTableController extends BaseController implements Initializable {
     
-    @FXML
-    private TableView<SavingsGoalModel> savingsGoalsTable;
+    @FXML private TableView<SavingsGoalModel> savingsGoalsTable;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, Float> currentBalanceCol;
+    @FXML private TableColumn<SavingsGoalModel, Float> currentBalanceCol;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, Integer> daysCol;
+    @FXML private TableColumn<SavingsGoalModel, Integer> daysCol;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, Date> endDateCol;
+    @FXML private TableColumn<SavingsGoalModel, Date> endDateCol;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, Float> initialBalanceCol;
+    @FXML private TableColumn<SavingsGoalModel, Float> initialBalanceCol;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, String> savingsGoalCol;
+    @FXML private TableColumn<SavingsGoalModel, String> savingsGoalCol;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, Float> savingsPerWeekCol;
+    @FXML private TableColumn<SavingsGoalModel, Float> savingsPerWeekCol;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, Date> startDateCol;
+    @FXML private TableColumn<SavingsGoalModel, Date> startDateCol;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, Float> targetAmountCol;
+    @FXML private TableColumn<SavingsGoalModel, Float> targetAmountCol;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, Integer> weeksCol;
+    @FXML private TableColumn<SavingsGoalModel, Integer> weeksCol;
     
     public SavingsGoalTableController(SavingsGoalManager savingsGoalManager, ViewFactory viewFactory, String fxmlName) {
         super(savingsGoalManager, viewFactory, fxmlName);
     }
     
+    /**
+     * Initializes the table view and adds cell factories to the two date columns which support converting from Date
+     * to String
+     */
     private void setUpSavingsGoalsTableView() {
         currentBalanceCol.setCellValueFactory(new PropertyValueFactory<SavingsGoalModel, Float>("currentBalanceProp"));
         daysCol.setCellValueFactory(new PropertyValueFactory<SavingsGoalModel, Integer>("daysTillPaymentProp"));
@@ -80,6 +74,10 @@ public class SavingsGoalTableController extends BaseController implements Initia
         endDateCol.setCellFactory(new TableColumnFormatter<SavingsGoalModel, Date>(CommonUtils.STD_FORMAT));
     }
     
+    /**
+     * Associates the backing data list to the table. A row factory is added to support the context menu (delete, edit)
+     * and double click to edit
+     */
     private void populateSavingsGoalTableView() {
         this.savingsGoalsTable.setItems(null);
         this.savingsGoalsTable.setItems(this.savingsGoalManager.getSavingsGoalsList(true));
