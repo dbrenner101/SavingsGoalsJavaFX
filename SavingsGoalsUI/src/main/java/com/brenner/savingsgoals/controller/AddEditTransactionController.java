@@ -28,28 +28,29 @@ public class AddEditTransactionController extends BaseController implements Init
     
     Validator validator = new Validator();
     
-    @FXML
-    private TextField amountTextField;
+    @FXML private TextField amountTextField;
     
-    @FXML
-    private DatePicker datePicker;
+    @FXML private DatePicker datePicker;
     
-    @FXML
-    private ChoiceBox<SavingsGoalModel> fromGoalSelection;
+    @FXML private ChoiceBox<SavingsGoalModel> fromGoalSelection;
     
-    @FXML
-    private TextArea notesTextArea;
+    @FXML private TextArea notesTextArea;
     
-    @FXML
-    private Button saveButton;
+    @FXML private Button saveButton;
     
-    @FXML
-    private ChoiceBox<SavingsGoalModel> toGoalSelection;
+    @FXML private ChoiceBox<SavingsGoalModel> toGoalSelection;
     
     public AddEditTransactionController(SavingsGoalManager savingsGoalManager, ViewFactory viewFactory, String fxmlName) {
         super(savingsGoalManager, viewFactory, fxmlName);
     }
     
+    /**
+     * Save button action checks the validity of the input and if valid sends the data to the SavingsGoalManager
+     * for processing. The view is directed back to the transactions list after submission.
+     *
+     * @param event The action event
+     * @throws ParseException
+     */
     @FXML
     void saveButtonAction(ActionEvent event) throws ParseException {
         validator.validate();
@@ -68,6 +69,9 @@ public class AddEditTransactionController extends BaseController implements Init
         }
     }
     
+    /**
+     * Method initializes the choiceboxes with the SavingsGoalsList held on the SavingsGoalManager.
+     */
     private void initChoiceBoxes() {
         this.fromGoalSelection.setItems(super.savingsGoalManager.getSavingsGoalsList(true));
         this.toGoalSelection.setItems(super.savingsGoalManager.getSavingsGoalsList(true));
@@ -97,6 +101,9 @@ public class AddEditTransactionController extends BaseController implements Init
         });
     }
     
+    /**
+     * Builds the validation rules using ValidatorFX
+     */
     private void buildValidation() {
         validator.createCheck().dependsOn("fromGoal", fromGoalSelection.valueProperty())
                 .withMethod(c -> {

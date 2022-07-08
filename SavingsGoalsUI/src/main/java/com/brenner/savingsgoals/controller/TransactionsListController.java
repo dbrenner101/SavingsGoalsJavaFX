@@ -66,6 +66,7 @@ public class TransactionsListController extends BaseController implements Initia
         this.transactionsTable.setItems(transactionsList);
         appliedCol.setCellFactory(CheckBoxTableCell.forTableColumn(appliedCol));
     
+        // Listener captured changes to the checkbox in the applied column. Changes are immediately sent for persistence.
         transactionsList.addListener((ListChangeListener<TransactionModel>) c -> {
             while (c.next()) {
                 if (c.wasAdded()) {
@@ -80,6 +81,7 @@ public class TransactionsListController extends BaseController implements Initia
             }
         });
     
+        // Row factory creates and associates the context menu for deleting a transaction.
         this.transactionsTable.setRowFactory(param -> {
             final TableRow<TransactionModel> row = new TableRow<>();
         
