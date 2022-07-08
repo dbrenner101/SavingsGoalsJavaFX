@@ -11,19 +11,19 @@
         <menus>
           <Menu mnemonicParsing="false" text="Savings Goals">
             <items>
-              <MenuItem fx:id="displaySavingsGoalsMnuItm" mnemonicParsing="false" onAction="#displaySavingsGoalsAction" text="Display" />
+              <MenuItem fx:id="displaySavingsGoalsMnuItm" mnemonicParsing="false" onAction="#displaySavingsGoalsAction" text="List Savings Goals" />
               <MenuItem fx:id="addNewSavingsGoalMenuItem" mnemonicParsing="false" onAction="#addNewSavingsGoalMenuItemAction" text="Add new savings goal" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Deposits">
             <items>
-              <MenuItem fx:id="displayDepositMenuItem" mnemonicParsing="false" onAction="#displayDepositsMenuItemAction" text="Display" />
+              <MenuItem fx:id="displayDepositMenuItem" mnemonicParsing="false" onAction="#displayDepositsMenuItemAction" text="List Deposits" />
               <MenuItem fx:id="addNewDepositMenuItem" mnemonicParsing="false" onAction="#addNewDepositsMenuItemAction" text="Add new deposit" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Transactions">
             <items>
-              <MenuItem fx:id="displayTransactionMenuItem" mnemonicParsing="false" onAction="#displayTransactionsAction" text="Display" />
+              <MenuItem fx:id="displayTransactionMenuItem" mnemonicParsing="false" onAction="#displayTransactionsAction" text="List Transactions" />
                   <MenuItem fx:id="addNewTransactionMenuItem" mnemonicParsing="false" onAction="#addNewTransactionAction" text="Add new transaction" />
             </items>
           </Menu>
