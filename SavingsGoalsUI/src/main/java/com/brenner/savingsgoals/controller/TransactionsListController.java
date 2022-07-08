@@ -22,8 +22,6 @@ import java.util.ResourceBundle;
  * and Observable list managed by the SavingsGoalManager
  *
  * Relies on the transactionList.fxml
- *
- * @TODO Add, delete capability from the table via a context menu on each row.
  */
 public class TransactionsListController extends BaseController implements Initializable {
     
@@ -68,6 +66,7 @@ public class TransactionsListController extends BaseController implements Initia
                 final MenuItem deleteTransactionItem = new MenuItem("Delete Transaction");
                 deleteTransactionItem.setOnAction(e -> {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setContentText("Confirm delete transaction");
                     alert.initModality(Modality.APPLICATION_MODAL);
                     alert.showAndWait().ifPresent(type -> {
                         if (type.getButtonData().equals(ButtonBar.ButtonData.OK_DONE)) {
