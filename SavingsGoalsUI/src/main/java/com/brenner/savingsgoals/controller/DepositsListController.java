@@ -29,14 +29,11 @@ import java.util.ResourceBundle;
 public class DepositsListController extends BaseController implements Initializable {
     
     
-    @FXML
-    private TableColumn<DepositModel, Float> depositAmountCol;
+    @FXML private TableColumn<DepositModel, Float> depositAmountCol;
     
-    @FXML
-    private TableColumn<DepositModel, Date> depositDateCol;
+    @FXML private TableColumn<DepositModel, Date> depositDateCol;
     
-    @FXML
-    private TableView<DepositModel> depositsView;
+    @FXML private TableView<DepositModel> depositsView;
     
     public DepositsListController(SavingsGoalManager savingsGoalManager, ViewFactory viewFactory, String fxmlName) {
         super(savingsGoalManager, viewFactory, fxmlName);
@@ -50,6 +47,12 @@ public class DepositsListController extends BaseController implements Initializa
         this.depositsView = depositsView;
     }
     
+    /**
+     * Builds the table view for deposits. Associates the table with the daposits list in the SavingsGoalManager. Cell
+     * factory is set for the date column to convert from a Date to a String
+     *
+     * A row factory is set that attaches a context menu for edit, delete and allocate functions.
+     */
     private void setUpDepositTableView() {
         depositAmountCol.setCellValueFactory(new PropertyValueFactory<DepositModel, Float>("depositAmountProp"));
         depositDateCol.setCellValueFactory(new PropertyValueFactory<DepositModel, Date>("depositDateProp"));
