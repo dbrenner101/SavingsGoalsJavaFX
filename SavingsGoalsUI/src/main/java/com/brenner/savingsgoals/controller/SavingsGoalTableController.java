@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
+import javafx.stage.Modality;
 import javafx.util.Callback;
 
 import java.net.URL;
@@ -101,8 +102,15 @@ public class SavingsGoalTableController extends BaseController implements Initia
                 deleteRowItem.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
-                        savingsGoalManager.setSelectedSavingsGoalIndex(savingsGoalsTable.getSelectionModel().getSelectedIndex());
-                        savingsGoalManager.deleteSavingsGoal(row.getItem().getSavingsGoal());
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setContentText("Confirm delete savings goal");
+                        alert.initModality(Modality.APPLICATION_MODAL);
+                        alert.showAndWait().ifPresent(type -> {
+                            if (type.getButtonData().equals(ButtonBar.ButtonData.OK_DONE)) {
+                                savingsGoalManager.setSelectedSavingsGoalIndex(savingsGoalsTable.getSelectionModel().getSelectedIndex());
+                                savingsGoalManager.deleteSavingsGoal(row.getItem().getSavingsGoal());
+                            }
+                        });
                     }
                 });
                 
