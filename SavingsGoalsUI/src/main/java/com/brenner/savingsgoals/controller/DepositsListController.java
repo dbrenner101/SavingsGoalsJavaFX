@@ -6,19 +6,22 @@ import com.brenner.savingsgoals.util.CommonUtils;
 import com.brenner.savingsgoals.view.TableColumnFormatter;
 import com.brenner.savingsgoals.view.ViewFactory;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Modality;
 import javafx.util.Callback;
 
 import java.net.URL;
-import java.util.Date;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Controller to handle management and interactions with the list of deposits. A context menu on each row in the table
@@ -33,7 +36,11 @@ public class DepositsListController extends BaseController implements Initializa
     
     @FXML private TableColumn<DepositModel, Date> depositDateCol;
     
+    @FXML private TableColumn<DepositModel, Boolean> includeInAllocationCol;
+    
     @FXML private TableView<DepositModel> depositsView;
+    
+    @FXML private Button allocateButton;
     
     public DepositsListController(SavingsGoalManager savingsGoalManager, ViewFactory viewFactory, String fxmlName) {
         super(savingsGoalManager, viewFactory, fxmlName);
@@ -47,6 +54,16 @@ public class DepositsListController extends BaseController implements Initializa
         this.depositsView = depositsView;
     }
     
+    @FXML
+    void allocateButtonAction(ActionEvent event) {
+        List<DepositModel> deposits = Collections.unmodifiableList(this.depositsView.getItems());
+        List<DepositModel> selectedDeposits = deposits.stream().filter(t -> t.isSelected()).collect(Collectors.toList());
+        
+        this.savingsGoalManager.setSelectedDepositsForAllocation(selectedDeposits);
+        viewFactory.showDepositAllocation();
+        
+    }
+    
     /**
      * Builds the table view for deposits. Associates the table with the daposits list in the SavingsGoalManager. Cell
      * factory is set for the date column to convert from a Date to a String
@@ -56,10 +73,18 @@ public class DepositsListController extends BaseController implements Initializa
     private void setUpDepositTableView() {
         depositAmountCol.setCellValueFactory(new PropertyValueFactory<DepositModel, Float>("depositAmountProp"));
         depositDateCol.setCellValueFactory(new PropertyValueFactory<DepositModel, Date>("depositDateProp"));
-        
         depositDateCol.setCellFactory(new TableColumnFormatter<DepositModel, Date>(CommonUtils.STD_FORMAT));
-        
-        this.depositsView.setItems(this.savingsGoalManager.getDepositsList());
+    
+        ObservableList<DepositModel> depositsList = this.savingsGoalManager.getDepositsList();
+        this.depositsView.setItems(depositsList);
+    
+        includeInAllocationCol.setCellFactory(CheckBoxTableCell.forTableColumn(new Callback<Integer, ObservableValue<Boolean>>() {
+            @Override
+            public ObservableValue<Boolean> call(Integer param) {
+                DepositModel depositModel = depositsList.get(param);
+                return depositModel.selectedProperty();
+            }
+        }));
     
         this.depositsView.setRowFactory(new Callback<TableView<DepositModel>, TableRow<DepositModel>>() {
             @Override
@@ -72,7 +97,9 @@ public class DepositsListController extends BaseController implements Initializa
                     @Override
                     public void handle(ActionEvent event) {
                         DepositModel selectedModel = depositsView.getSelectionModel().getSelectedItem();
-                        savingsGoalManager.setSelectedDepositModel(selectedModel);
+                        List<DepositModel> selectedDeposits = new ArrayList<>(1);
+                        selectedDeposits.add(selectedModel);
+                        savingsGoalManager.setSelectedDepositsForAllocation(selectedDeposits);
                         viewFactory.showDepositAllocation();
                     }
                 });

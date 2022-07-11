@@ -18,7 +18,7 @@ import java.io.InputStreamReader;
  */
 public abstract class AbstractServiceManager {
     /** Base url for all calls. Assumes all calls go to the same endpoint. */
-    //private static final String BASE_URL = "http://localhost:8080/savingsgoalsmanager/api";
+    //private static final String BASE_URL = "http://dbrenner.apps:8080/savingsgoalsmanager/api";
     private static final String BASE_URL = "http://localhost:9001/api";
     
     /**

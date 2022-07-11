@@ -3,6 +3,9 @@ package com.brenner.savingsgoals.controller;
 import com.brenner.savingsgoals.SavingsGoalManager;
 import com.brenner.savingsgoals.model.DepositModel;
 import com.brenner.savingsgoals.model.SavingsGoalModel;
+import com.brenner.savingsgoals.service.model.Deposit;
+import com.brenner.savingsgoals.service.model.SavingsGoalAllocation;
+import com.brenner.savingsgoals.service.model.SavingsGoalDepositAllocation;
 import com.brenner.savingsgoals.util.CommonUtils;
 import com.brenner.savingsgoals.view.TableColumnFormatter;
 import com.brenner.savingsgoals.view.ViewFactory;
@@ -20,10 +23,8 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Controller to handle management of the allocation to each goal. When the scene is initialized each goal is allocated
@@ -35,44 +36,35 @@ import java.util.ResourceBundle;
  */
 public class DepositAllocationController extends BaseController implements Initializable {
     
-    @FXML
-    private TableView<SavingsGoalModel> savingsGoalsTable;
+    @FXML private TableView<SavingsGoalModel> savingsGoalsTable;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, String> allocatedAmountCol;
+    @FXML private TableColumn<SavingsGoalModel, String> allocatedAmountCol;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, Float> currentBalanceCol;
+    @FXML private TableColumn<SavingsGoalModel, Float> currentBalanceCol;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, Integer> daysCol;
+    @FXML private TableColumn<SavingsGoalModel, Integer> daysCol;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, Date> endDateCol;
+    @FXML private TableColumn<SavingsGoalModel, Date> endDateCol;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, Float> initialBalanceCol;
+    @FXML private TableColumn<SavingsGoalModel, Float> initialBalanceCol;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, String> savingsGoalCol;
+    @FXML private TableColumn<SavingsGoalModel, String> savingsGoalCol;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, Float> savingsPerWeekCol;
+    @FXML private TableColumn<SavingsGoalModel, Float> savingsPerWeekCol;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, Date> startDateCol;
+    @FXML private TableColumn<SavingsGoalModel, Date> startDateCol;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, Float> targetAmountCol;
+    @FXML private TableColumn<SavingsGoalModel, Float> targetAmountCol;
     
-    @FXML
-    private TableColumn<SavingsGoalModel, Integer> weeksCol;
+    @FXML private TableColumn<SavingsGoalModel, Integer> weeksCol;
     
-    @FXML
-    private Label defaultGoalName;
+    @FXML private Label defaultGoalName;
     
-    @FXML
-    private Label defaultGoalAmount;
+    @FXML private Label defaultGoalAmount;
+    
+    @FXML private Label amountToAllocateLabel;
+    
+    @FXML private Label totalAllocatedToDefaultGoal;
     
     public DepositAllocationController(SavingsGoalManager savingsGoalManager, ViewFactory viewFactory, String fxmlName) {
         super(savingsGoalManager, viewFactory, fxmlName);
@@ -85,7 +77,22 @@ public class DepositAllocationController extends BaseController implements Initi
     
     @FXML
     void saveAllocationAction(ActionEvent event) {
-        this.savingsGoalManager.allocateDepositToGoals(this.savingsGoalsTable.getItems());
+        List<SavingsGoalModel> modelList = this.savingsGoalsTable.getItems();
+        List<SavingsGoalAllocation> allocations = new ArrayList<>(modelList.size());
+        for(SavingsGoalModel modelGoal : modelList) {
+            SavingsGoalAllocation allocation = new SavingsGoalAllocation(
+                    modelGoal.getSavingsGoalId(),
+                    new BigDecimal(modelGoal.getAllocatedAmount()));
+            allocations.add(allocation);
+        }
+        SavingsGoalDepositAllocation depositAllocation = new SavingsGoalDepositAllocation();
+        depositAllocation.setSavingsGoalAllocations(allocations);
+        List<Deposit> depositsInAllocation = savingsGoalManager.getSelectedDepositsForAllocation()
+                        .stream().map(d -> d.getDeposit()).collect(Collectors.toList());
+        depositAllocation.setDeposits(depositsInAllocation);
+        this.savingsGoalManager.allocateDepositToGoals(depositAllocation);
+        
+        this.viewFactory.showDepositsList();
     }
     
     private void setUpSavingsGoalsTableView() {
@@ -130,8 +137,12 @@ public class DepositAllocationController extends BaseController implements Initi
     private void populateSavingsGoalTableView() {
         this.savingsGoalsTable.setItems(null);
         List<SavingsGoalModel> savingsGoals = this.savingsGoalManager.getSavingsGoalsList(false);
-        DepositModel depositModel = this.savingsGoalManager.getSelectedDepositModel();
-        BigDecimal depositAmount = depositModel.getDeposit().getAmount();
+        List<DepositModel> selectedDeposits = this.savingsGoalManager.getSelectedDepositsForAllocation();
+        BigDecimal depositAmount = BigDecimal.valueOf(0);
+        for (DepositModel depositModel : selectedDeposits){
+            depositAmount = depositAmount.add(depositModel.getDeposit().getAmount());
+        }
+        this.amountToAllocateLabel.setText(CommonUtils.formatAsCurrency(depositAmount.floatValue()));
         BigDecimal remainingDeposit = depositAmount;
         for (SavingsGoalModel savingsGoal : savingsGoals) {
             BigDecimal goalWeeklyAmount = savingsGoal.getSavingsGoal().getSavingsPerWeek();
@@ -143,7 +154,7 @@ public class DepositAllocationController extends BaseController implements Initi
         }
         this.savingsGoalsTable.setItems(this.savingsGoalManager.getSavingsGoalsList(true));
         
-        this.defaultGoalAmount.setText(remainingDeposit.toString());
+        this.totalAllocatedToDefaultGoal.setText(CommonUtils.formatAsCurrency(remainingDeposit.floatValue()));
     }
     
     @Override

@@ -2,6 +2,7 @@ package com.brenner.savingsgoals.model;
 
 import com.brenner.savingsgoals.service.model.Deposit;
 import com.brenner.savingsgoals.util.CommonUtils;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -18,10 +19,13 @@ public class DepositModel {
     
     private final SimpleStringProperty depositAmountProp;
     
+    private final SimpleBooleanProperty selected;
+    
     public DepositModel(Deposit deposit) {
         this.deposit = deposit;
         this.depositDateProp = new SimpleObjectProperty<>(deposit.getDate());
         this.depositAmountProp = new SimpleStringProperty(CommonUtils.formatAsCurrency(deposit.getAmount().floatValue()));
+        this.selected = new SimpleBooleanProperty(false);
     }
     
     public Deposit getDeposit() {
@@ -54,5 +58,17 @@ public class DepositModel {
     
     public void setDepositAmountProp(String depositAmountProp) {
         this.depositAmountProp.set(depositAmountProp);
+    }
+    
+    public boolean isSelected() {
+        return selected.get();
+    }
+    
+    public SimpleBooleanProperty selectedProperty() {
+        return selected;
+    }
+    
+    public void setSelected(boolean selected) {
+        this.selected.set(selected);
     }
 }

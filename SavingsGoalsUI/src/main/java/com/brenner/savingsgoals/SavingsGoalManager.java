@@ -15,7 +15,6 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +30,8 @@ public class SavingsGoalManager {
     
     private Integer selectedSavingsGoalIndex = null;
     private DepositModel selectedDepositModel;
+    
+    private List<DepositModel> selectedDepositsForAllocation;
     
     private ObservableList<SavingsGoalModel> savingsGoalsList = FXCollections.observableArrayList();
     private ObservableList<DepositModel> depositsList = FXCollections.observableArrayList();
@@ -418,21 +419,11 @@ public class SavingsGoalManager {
      *
      * After persistence the goals and deposit lists are refreshed.
      *
-     * @param savingsGoalModels List of goals with their updated allocations amounts.
+     * @param savingsGoalDepositAllocation Wrapper object for the allocations to each goal and the deposits.
      */
-    public void allocateDepositToGoals(List<SavingsGoalModel> savingsGoalModels) {
+    public void allocateDepositToGoals(SavingsGoalDepositAllocation savingsGoalDepositAllocation) {
         
-        List<SavingsGoalDepositAllocation> savingsGoalAllocations = new ArrayList<>(savingsGoalModels.size());
-        
-        for (SavingsGoalModel model : savingsGoalModels) {
-            SavingsGoalDepositAllocation allocation = new SavingsGoalDepositAllocation(
-                    model.getSavingsGoalId(),
-                    this.selectedDepositModel.getDeposit().getDepositId(),
-                    new BigDecimal(model.getAllocatedAmount()));
-            savingsGoalAllocations.add(allocation);
-        }
-        
-        this.savingsGoalsService.allocateDepositToGoals(savingsGoalAllocations);
+        this.savingsGoalsService.allocateDepositToGoals(savingsGoalDepositAllocation);
         this.retrieveSavingsGoalsAsync();
         this.retrieveDeposits();
     }
@@ -491,5 +482,13 @@ public class SavingsGoalManager {
     
     public void setSelectedDepositModel(DepositModel selectedDepositModel) {
         this.selectedDepositModel = selectedDepositModel;
+    }
+    
+    public List<DepositModel> getSelectedDepositsForAllocation() {
+        return selectedDepositsForAllocation;
+    }
+    
+    public void setSelectedDepositsForAllocation(List<DepositModel> selectedDepositsForAllocation) {
+        this.selectedDepositsForAllocation = selectedDepositsForAllocation;
     }
 }

@@ -1,42 +1,35 @@
 package com.brenner.savingsgoals.service.model;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Service object for a SavingsGoalDepositAllocation that acts in a DTO capacity.
  */
 public class SavingsGoalDepositAllocation {
-    Integer savingsGoalId;
-    Long depositId;
-    BigDecimal allocationAmount;
     
-    public SavingsGoalDepositAllocation(Integer savingsGoalId, Long depositId, BigDecimal allocationAmount) {
-        this.savingsGoalId = savingsGoalId;
-        this.depositId = depositId;
-        this.allocationAmount = allocationAmount;
+    List<Deposit> deposits;
+    List<SavingsGoalAllocation> savingsGoalAllocations;
+    
+    public SavingsGoalDepositAllocation() {}
+    
+    public SavingsGoalDepositAllocation(List<Deposit> deposits, List<SavingsGoalAllocation> savingsGoalAllocations) {
+        this.deposits = deposits;
+        this.savingsGoalAllocations = savingsGoalAllocations;
     }
     
-    public Integer getSavingsGoalId() {
-        return savingsGoalId;
+    public List<Deposit> getDeposits() {
+        return deposits;
     }
     
-    public void setSavingsGoalId(Integer savingsGoalId) {
-        this.savingsGoalId = savingsGoalId;
+    public void setDeposits(List<Deposit> deposits) {
+        this.deposits = deposits;
     }
     
-    public Long getDepositId() {
-        return depositId;
+    public List<SavingsGoalAllocation> getSavingsGoalAllocations() {
+        return savingsGoalAllocations;
     }
     
-    public void setDepositId(Long depositId) {
-        this.depositId = depositId;
-    }
-    
-    public BigDecimal getAllocationAmount() {
-        return allocationAmount;
-    }
-    
-    public void setAllocationAmount(BigDecimal allocationAmount) {
-        this.allocationAmount = allocationAmount;
+    public void setSavingsGoalAllocations(List<SavingsGoalAllocation> savingsGoalAllocations) {
+        this.savingsGoalAllocations = savingsGoalAllocations;
     }
 }

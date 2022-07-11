@@ -20,7 +20,7 @@ public class SavingsGoalsService extends AbstractServiceManager {
      *
      * @param savingsGoalAllocations A list of the objects that encapsulate the allocations
      */
-    public void allocateDepositToGoals(List<SavingsGoalDepositAllocation> savingsGoalAllocations) {
+    public void allocateDepositToGoals(SavingsGoalDepositAllocation savingsGoalAllocations) {
         try {
             super.doPut("/savingsgoals/allocateDeposit", mapper.writeValueAsString(savingsGoalAllocations));
         } catch (IOException ioe) {
