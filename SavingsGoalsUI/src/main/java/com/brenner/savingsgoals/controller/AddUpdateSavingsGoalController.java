@@ -1,25 +1,29 @@
 package com.brenner.savingsgoals.controller;
 
+import java.math.BigDecimal;
+import java.net.URL;
+import java.text.ParseException;
+import java.util.ResourceBundle;
+
 import com.brenner.savingsgoals.SavingsGoalManager;
 import com.brenner.savingsgoals.model.SavingsGoalModel;
 import com.brenner.savingsgoals.service.model.SavingsGoal;
 import com.brenner.savingsgoals.util.CommonUtils;
 import com.brenner.savingsgoals.view.ViewFactory;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import net.synedra.validatorfx.Validator;
-
-import java.math.BigDecimal;
-import java.net.URL;
-import java.text.ParseException;
-import java.util.Date;
-import java.util.ResourceBundle;
 
 /**
  * Controller to handle the add/update scene and behavior. Includes a validator implementation that enforces required data
@@ -96,7 +100,7 @@ public class AddUpdateSavingsGoalController extends BaseController implements In
                     }
                     else {
                         try {
-                            Date startDate = CommonUtils.parseStdFormatDateString(startDateStr);
+                            CommonUtils.parseStdFormatDateString(startDateStr);
                         } catch (ParseException e) {
                             c.error("Please enter a valid start date (MM/dd/yyyy).");
                         }
@@ -112,7 +116,7 @@ public class AddUpdateSavingsGoalController extends BaseController implements In
                     }
                     else {
                         try {
-                            Date endDate = CommonUtils.parseStdFormatDateString(endDateStr);
+                            CommonUtils.parseStdFormatDateString(endDateStr);
                         } catch (ParseException e) {
                             c.error("Please enter a valid end date (MM/dd/yyyy).");
                         }

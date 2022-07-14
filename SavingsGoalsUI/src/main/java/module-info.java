@@ -1,7 +1,7 @@
 module com.brenner.savingsgoals {
     requires javafx.fxml;
     requires javafx.controls;
-    requires javafx.graphics;
+    requires transitive javafx.graphics;
     
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
@@ -26,8 +26,4 @@ module com.brenner.savingsgoals {
     
     exports com.brenner.savingsgoals.model;
     exports com.brenner.savingsgoals.service.model;
-    //opens com.brenner.savingsgoals.model;
-    
-    /*opens com.brenner.savingsgoals to javafx.fxml;
-    exports com.brenner.savingsgoals;*/
 }

@@ -1,10 +1,19 @@
 package com.brenner.savingsgoals.controller;
 
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+
 import com.brenner.savingsgoals.SavingsGoalManager;
 import com.brenner.savingsgoals.model.DepositModel;
 import com.brenner.savingsgoals.util.CommonUtils;
 import com.brenner.savingsgoals.view.TableColumnFormatter;
 import com.brenner.savingsgoals.view.ViewFactory;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -12,16 +21,19 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Modality;
 import javafx.util.Callback;
-
-import java.net.URL;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Controller to handle management and interactions with the list of deposits. A context menu on each row in the table
@@ -47,7 +59,8 @@ public class DepositsListController extends BaseController implements Initializa
     }
     
     public DepositsListController(SavingsGoalManager savingsGoalManager, ViewFactory viewFactory, String fxmlName,
-            TableColumn depositAmountCol, TableColumn depositDateCol, TableView depositsView) {
+            TableColumn<DepositModel, Float> depositAmountCol, TableColumn<DepositModel, Date> depositDateCol, 
+            TableView<DepositModel> depositsView) {
         super(savingsGoalManager, viewFactory, fxmlName);
         this.depositAmountCol = depositAmountCol;
         this.depositDateCol = depositDateCol;

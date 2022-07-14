@@ -181,7 +181,6 @@ public class SavingsGoalManager {
         updateDepositTask.run();
         
         updateDepositTask.setOnSucceeded(e -> {
-            Deposit result = updateDepositTask.getValue();
             this.selectedDepositModel = null;
             retrieveDeposits();
         });
@@ -363,7 +362,7 @@ public class SavingsGoalManager {
      * @param savingsGoal The goal with unique identifier to delete
      */
     public void deleteSavingsGoal(SavingsGoal savingsGoal) {
-        Task task = new Task() {
+        Task<Object> task = new Task<>() {
             @Override
             protected Object call() {
                 savingsGoalsService.deleteSavingsGoal(savingsGoal.getSavingsGoalId());
@@ -380,6 +379,7 @@ public class SavingsGoalManager {
         
         task.setOnFailed(e -> {
             Alert alert = createErrorAlert("Delete savings goal failed: " + task.getException().getMessage());
+            alert.show();
         });
     }
     

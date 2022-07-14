@@ -103,7 +103,7 @@ public class SavingsGoalsService extends AbstractServiceManager {
      */
     public void deleteSavingsGoal(Integer savingsGoalId) {
         try {
-            int status = super.doDelete("/savingsgoals/" + savingsGoalId, null);
+            super.doDelete("/savingsgoals/" + savingsGoalId, null);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

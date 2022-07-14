@@ -67,7 +67,7 @@ public class SavingsGoalModel implements Comparable<SavingsGoalModel> {
         return savingsStartDateProp.get();
     }
     
-    public SimpleObjectProperty savingsStartDatePropProperty() {
+    public SimpleObjectProperty<Date> savingsStartDatePropProperty() {
         return savingsStartDateProp;
     }
     
@@ -75,7 +75,7 @@ public class SavingsGoalModel implements Comparable<SavingsGoalModel> {
         return savingsEndDateProp.get();
     }
     
-    public SimpleObjectProperty savingsEndDatePropProperty() {
+    public SimpleObjectProperty<Date> savingsEndDatePropProperty() {
         return savingsEndDateProp;
     }
     
